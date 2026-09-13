@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from threading import Thread
 
 from routes.auth import router as auth_router
 from routes.plants import router as plants_router
 from routes.ai import router as ai_router
 from routes.rag import router as rag_router
+
+from services.disease_model import load
 
 
 app = FastAPI(
@@ -25,7 +28,10 @@ app.add_middleware(
 )
 
 
+# ============================================================
 # API ROUTES
+# ============================================================
+
 app.include_router(
     auth_router,
     prefix="/api/auth",
@@ -50,6 +56,31 @@ app.include_router(
     tags=["RAG"]
 )
 
+
+# ============================================================
+# BACKGROUND MODEL LOADING
+# ============================================================
+
+def load_model_background():
+    try:
+        print("Starting background AI model loading...")
+        load()
+        print("Background AI model loading completed.")
+    except Exception as e:
+        print(f"WARNING: Background model loading failed: {e}")
+
+
+@app.on_event("startup")
+async def startup_event():
+    Thread(
+        target=load_model_background,
+        daemon=True
+    ).start()
+
+
+# ============================================================
+# HEALTH / ROOT
+# ============================================================
 
 @app.get("/")
 def root():
