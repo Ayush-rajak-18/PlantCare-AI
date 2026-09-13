@@ -543,13 +543,13 @@ def predict_image(image: Image.Image):
 # LOAD MODEL WHEN MODULE STARTS
 # ============================================================
 
-try:
+#try:
 
-    load()
+#    load()
 
-except Exception as e:
+#except Exception as e:
 
-    print(
-        "WARNING: Model initialization "
-        f"failed: {e}"
-    )
+  #  print(
+  #      "WARNING: Model initialization "
+  #      f"failed: {e}"
+  #  )
