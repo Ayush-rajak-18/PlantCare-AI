@@ -1,0 +1,389 @@
+[
+  {
+    "source": "apple.txt",
+    "filename": "apple.txt",
+    "category": "general",
+    "plant": "Apple",
+    "disease": null,
+    "condition": null,
+    "text": "Plant: Apple\nWatering: Water deeply when the soil begins to dry, especially during establishment and hot weather.\nSunlight: Full sun is preferred for good growth and fruiting.\nSoil: Well-drained soil with organic matter.\nCommon problems: Apple scab and black rot.\nCare: Remove fallen infected leaves and fruit, prune for airflow, and avoid unnecessary leaf wetness."
+  },
+  {
+    "source": "diseases/apple_black_rot.txt",
+    "filename": "apple_black_rot.txt",
+    "category": "disease",
+    "plant": "Apple",
+    "disease": "Black Rot",
+    "condition": null,
+    "text": "﻿Plant: Apple\nDisease: Black Rot\nSymptoms:\nDark, enlarging lesions can occur on leaves, fruit, and branches. Fruit may develop dark rot and eventually shrivel.\nManagement:\nRemove infected fruit and plant material. Prune affected areas where appropriate and maintain good airflow.\nPrevention:\nKeep the growing area clean, remove fallen or diseased material, and avoid unnecessary leaf wetness.\nPlant Care:\nProvide full sun and well-drained soil. Maintain appropriate watering and avoid waterlogging."
+  },
+  {
+    "source": "diseases/apple_rust.txt",
+    "filename": "apple_rust.txt",
+    "category": "disease",
+    "plant": "Apple",
+    "disease": "Rust",
+    "condition": null,
+    "text": "﻿Plant: Apple\nDisease: Rust\nSymptoms:\nRust diseases can cause yellow, orange, or reddish lesions on leaves and may reduce plant vigor when infection is severe.\nManagement:\nRemove heavily affected plant material where practical and improve airflow around the plant.\nPrevention:\nMaintain sanitation, good airflow, and avoid prolonged leaf wetness.\nPlant Care:\nGrow in full sun with well-drained soil and provide adequate moisture without waterlogging."
+  },
+  {
+    "source": "diseases/apple_scab.txt",
+    "filename": "apple_scab.txt",
+    "category": "disease",
+    "plant": "Apple",
+    "disease": "Apple Scab",
+    "condition": null,
+    "text": "﻿Plant: Apple\nDisease: Apple Scab\nSymptoms:\nOlive-green to brown spots can develop on leaves and fruit. Severe infection may cause leaf drop and affected fruit.\nManagement:\nRemove and dispose of fallen infected leaves and affected fruit. Improve airflow by appropriate pruning. Avoid unnecessary leaf wetness.\nPrevention:\nMaintain good orchard sanitation, improve airflow, and avoid prolonged moisture on foliage.\nPlant Care:\nProvide full sun and well-drained soil. Water the root zone rather than repeatedly wetting the leaves."
+  },
+  {
+    "source": "diseases/cherry_powdery_mildew.txt",
+    "filename": "cherry_powdery_mildew.txt",
+    "category": "disease",
+    "plant": "Cherry",
+    "disease": "Powdery Mildew",
+    "condition": null,
+    "text": "﻿Plant: Cherry\nDisease: Powdery Mildew\nSymptoms:\nA white, powdery fungal growth may appear on leaves and young shoots. Infected growth can become distorted or weakened.\nManagement:\nRemove severely affected plant material where practical and improve airflow around the plant. Avoid excessive humidity around foliage.\nPrevention:\nMaintain good spacing and airflow, monitor new growth regularly, and avoid unnecessary prolonged leaf wetness.\nPlant Care:\nProvide appropriate sunlight, well-drained soil, and balanced moisture."
+  },
+  {
+    "source": "diseases/corn_common_rust.txt",
+    "filename": "corn_common_rust.txt",
+    "category": "disease",
+    "plant": "Corn",
+    "disease": "Common Rust",
+    "condition": null,
+    "text": "﻿Plant: Corn\nDisease: Common Rust\nSymptoms:\nSmall reddish-brown to rust-colored pustules may appear on corn leaves. Severe infection can reduce healthy leaf area.\nManagement:\nMonitor plants regularly and manage the disease according to local agricultural recommendations. Remove severely affected material where practical.\nPrevention:\nUse healthy planting material, maintain appropriate plant spacing, and avoid conditions that keep foliage wet for long periods.\nPlant Care:\nProvide adequate sunlight, suitable soil moisture, and balanced nutrition."
+  },
+  {
+    "source": "diseases/corn_gray_leaf_spot.txt",
+    "filename": "corn_gray_leaf_spot.txt",
+    "category": "disease",
+    "plant": "Corn",
+    "disease": "Gray Leaf Spot",
+    "condition": null,
+    "text": "﻿Plant: Corn\nDisease: Gray Leaf Spot\nSymptoms:\nGray to tan rectangular lesions can develop on corn leaves, often expanding along the leaf veins.\nManagement:\nMonitor disease development and remove or manage infected crop residue according to local agricultural guidance.\nPrevention:\nCrop rotation and residue management can reduce disease pressure. Maintain suitable plant spacing and field airflow.\nPlant Care:\nProvide adequate moisture and balanced nutrition while avoiding unnecessary prolonged leaf wetness."
+  },
+  {
+    "source": "diseases/corn_leaf_blight.txt",
+    "filename": "corn_leaf_blight.txt",
+    "category": "disease",
+    "plant": "Corn",
+    "disease": "Leaf Blight",
+    "condition": null,
+    "text": "﻿Plant: Corn\nDisease: Leaf Blight\nSymptoms:\nLeaf blight can produce brown or tan lesions on corn leaves. Severe infection can reduce photosynthetic leaf area.\nManagement:\nMonitor affected plants and manage infected crop residue appropriately. Follow local agricultural recommendations for disease control.\nPrevention:\nUse healthy planting material, maintain crop rotation where appropriate, and reduce conditions that favor prolonged leaf wetness.\nPlant Care:\nMaintain adequate soil moisture and balanced nutrition."
+  },
+  {
+    "source": "diseases/corn_northern_leaf_blight.txt",
+    "filename": "corn_northern_leaf_blight.txt",
+    "category": "disease",
+    "plant": "Corn",
+    "disease": "Northern Leaf Blight",
+    "condition": null,
+    "text": "﻿Plant: Corn\nDisease: Northern Leaf Blight\nSymptoms:\nLong, elongated gray-green to tan lesions can develop on corn leaves and may expand significantly under favorable conditions.\nManagement:\nMonitor plants regularly and manage infected crop residue according to local agricultural recommendations.\nPrevention:\nCrop rotation, residue management, and appropriate plant spacing can help reduce disease pressure.\nPlant Care:\nMaintain adequate soil moisture and balanced nutrition and avoid prolonged wetness on foliage where practical."
+  },
+  {
+    "source": "diseases/grape_black_rot.txt",
+    "filename": "grape_black_rot.txt",
+    "category": "disease",
+    "plant": "Grape",
+    "disease": "Black Rot",
+    "condition": null,
+    "text": "﻿Plant: Grape\nDisease: Black Rot\nSymptoms:\nSmall reddish-brown lesions may develop on leaves and berries. Infected berries can darken, shrivel, and develop black fruiting structures.\nManagement:\nRemove infected berries and plant debris where practical. Improve canopy airflow and avoid unnecessary prolonged leaf wetness.\nPrevention:\nMaintain good vineyard sanitation, appropriate spacing, and airflow. Remove mummified fruit and infected debris.\nPlant Care:\nProvide adequate sunlight, well-drained soil, and appropriate irrigation without prolonged leaf wetness."
+  },
+  {
+    "source": "diseases/grape_esca.txt",
+    "filename": "grape_esca.txt",
+    "category": "disease",
+    "plant": "Grape",
+    "disease": "Esca",
+    "condition": null,
+    "text": "﻿Plant: Grape\nDisease: Esca\nSymptoms:\nEsca is associated with wood-decay fungi and may cause leaf symptoms, reduced vine vigor, and decline of affected grapevines.\nManagement:\nRemove severely affected or dead plant material where practical and maintain vineyard sanitation. Follow local agricultural guidance for management.\nPrevention:\nUse healthy planting material, make careful pruning cuts, and avoid unnecessary wounds to the vine.\nPlant Care:\nProvide adequate sunlight, appropriate irrigation, and good canopy airflow."
+  },
+  {
+    "source": "diseases/grape_leaf_blight.txt",
+    "filename": "grape_leaf_blight.txt",
+    "category": "disease",
+    "plant": "Grape",
+    "disease": "Leaf Blight",
+    "condition": null,
+    "text": "﻿Plant: Grape\nDisease: Leaf Blight\nSymptoms:\nLeaf blight can produce discolored or necrotic areas on grape leaves and may reduce healthy leaf area when infection is severe.\nManagement:\nRemove severely affected plant material where practical and improve canopy airflow. Avoid unnecessary prolonged leaf wetness.\nPrevention:\nMaintain vineyard sanitation, suitable plant spacing, and good airflow. Monitor leaves regularly.\nPlant Care:\nProvide adequate sunlight, well-drained soil, and appropriate irrigation."
+  },
+  {
+    "source": "diseases/orange_citrus_greening.txt",
+    "filename": "orange_citrus_greening.txt",
+    "category": "disease",
+    "plant": "Orange",
+    "disease": "Citrus Greening",
+    "condition": null,
+    "text": "﻿Plant: Orange\nDisease: Citrus Greening\nSymptoms:\nCitrus greening can cause yellowing or mottled leaves, reduced tree vigor, and small or poorly colored fruit. Symptoms can vary across the tree.\nManagement:\nMonitor trees regularly and follow local agricultural recommendations for management. Control of the insect vector and removal of severely affected trees may be recommended in affected production areas.\nPrevention:\nUse healthy, certified planting material where available and monitor for insect vectors. Follow regional citrus disease-management guidance.\nPlant Care:\nProvide adequate sunlight, appropriate irrigation, good drainage, and balanced nutrition."
+  },
+  {
+    "source": "diseases/peach_bacterial_spot.txt",
+    "filename": "peach_bacterial_spot.txt",
+    "category": "disease",
+    "plant": "Peach",
+    "disease": "Bacterial Spot",
+    "condition": null,
+    "text": "﻿Plant: Peach\nDisease: Bacterial Spot\nSymptoms:\nSmall dark spots can develop on leaves and fruit. Severe leaf infection may cause shot-hole symptoms and premature leaf drop.\nManagement:\nRemove severely affected plant material where practical and maintain good airflow. Follow local agricultural recommendations for bacterial disease management.\nPrevention:\nUse healthy planting material, maintain sanitation, and avoid unnecessary prolonged leaf wetness.\nPlant Care:\nProvide adequate sunlight, well-drained soil, and appropriate irrigation."
+  },
+  {
+    "source": "diseases/pepper_bell_bacterial_spot.txt",
+    "filename": "pepper_bell_bacterial_spot.txt",
+    "category": "disease",
+    "plant": "Pepper Bell",
+    "disease": "Bacterial Spot",
+    "condition": null,
+    "text": "﻿Plant: Pepper Bell\nDisease: Bacterial Spot\nSymptoms:\nSmall water-soaked or dark lesions may develop on leaves, stems, and fruit. Severe infection can cause leaf loss and blemished fruit.\nManagement:\nRemove severely affected plant material where practical. Avoid working with wet foliage and maintain good airflow.\nPrevention:\nUse healthy seed or planting material, maintain sanitation, avoid overhead irrigation when possible, and avoid unnecessary leaf wetness.\nPlant Care:\nProvide adequate sunlight, well-drained soil, and consistent moisture without waterlogging."
+  },
+  {
+    "source": "diseases/potato_early_blight.txt",
+    "filename": "potato_early_blight.txt",
+    "category": "disease",
+    "plant": "Potato",
+    "disease": "Early Blight",
+    "condition": null,
+    "text": "﻿Plant: Potato\nDisease: Early Blight\nSymptoms:\nDark brown lesions with concentric ring patterns may develop on older leaves. Severe infection can cause leaf yellowing and premature leaf loss.\nManagement:\nRemove heavily infected foliage where practical and maintain good field sanitation. Avoid prolonged leaf wetness.\nPrevention:\nPractice crop rotation, use healthy planting material, maintain appropriate plant nutrition, and reduce prolonged moisture on foliage.\nPlant Care:\nKeep soil consistently moist during tuber development but avoid waterlogging. Provide full sun and well-drained soil."
+  },
+  {
+    "source": "diseases/potato_late_blight.txt",
+    "filename": "potato_late_blight.txt",
+    "category": "disease",
+    "plant": "Potato",
+    "disease": "Late Blight",
+    "condition": null,
+    "text": "﻿Plant: Potato\nDisease: Late Blight\nSymptoms:\nWater-soaked or dark lesions may develop on leaves and stems. Under favorable conditions, lesions can expand rapidly and infected tissue may die.\nManagement:\nRemove heavily infected foliage where practical and follow local agricultural recommendations for disease management. Avoid prolonged leaf wetness.\nPrevention:\nUse healthy planting material, maintain good field sanitation, improve airflow, and avoid unnecessary overhead irrigation.\nPlant Care:\nKeep soil adequately moist without waterlogging. Provide full sun and well-drained soil."
+  },
+  {
+    "source": "diseases/squash_powdery_mildew.txt",
+    "filename": "squash_powdery_mildew.txt",
+    "category": "disease",
+    "plant": "Squash",
+    "disease": "Powdery Mildew",
+    "condition": null,
+    "text": "﻿Plant: Squash\nDisease: Powdery Mildew\nSymptoms:\nWhite, powder-like fungal growth can appear on leaves and stems. Severely affected leaves may become yellow, dry, or weakened.\nManagement:\nRemove severely affected leaves where practical and improve airflow around plants. Follow local agricultural recommendations for disease management.\nPrevention:\nProvide adequate plant spacing, good airflow, and avoid excessive conditions that favor disease development.\nPlant Care:\nProvide suitable sunlight, consistent soil moisture, and well-drained soil. Avoid unnecessary prolonged leaf wetness."
+  },
+  {
+    "source": "diseases/strawberry_leaf_scorch.txt",
+    "filename": "strawberry_leaf_scorch.txt",
+    "category": "disease",
+    "plant": "Strawberry",
+    "disease": "Leaf Scorch",
+    "condition": null,
+    "text": "﻿Plant: Strawberry\nDisease: Leaf Scorch\nSymptoms:\nSmall dark purple, reddish, or brown spots can develop on strawberry leaves. Spots may enlarge and cause affected tissue to appear scorched.\nManagement:\nRemove severely affected leaves where practical and maintain good airflow. Keep the growing area clean.\nPrevention:\nAvoid prolonged leaf wetness, maintain appropriate spacing, remove infected plant debris, and monitor plants regularly.\nPlant Care:\nProvide adequate sunlight, well-drained soil, and consistent moisture without waterlogging."
+  },
+  {
+    "source": "diseases/tomato_bacterial_spot.txt",
+    "filename": "tomato_bacterial_spot.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Bacterial Spot",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Bacterial Spot\nSymptoms: Small dark water-soaked spots may appear on leaves, stems, and fruit. Spots can enlarge and become rough or scabby.\nManagement: Remove severely affected plant material and keep foliage as dry as practical. Improve airflow and avoid working with plants when leaves are wet.\nPrevention: Use clean planting material, sanitize tools, provide adequate spacing, and avoid unnecessary overhead irrigation.\nPlant Care: Monitor new growth regularly and maintain good drainage, sunlight, and airflow."
+  },
+  {
+    "source": "diseases/tomato_early_blight.txt",
+    "filename": "tomato_early_blight.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Early Blight",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Early Blight\nSymptoms: Dark brown lesions with concentric ring patterns commonly develop on older leaves. Severe infection can cause yellowing and leaf drop.\nManagement: Remove badly affected leaves, improve airflow, and avoid prolonged leaf wetness.\nPrevention: Rotate crops where practical, remove infected plant debris, and keep foliage from contacting wet soil.\nPlant Care: Water at the soil surface when possible and monitor lower leaves regularly."
+  },
+  {
+    "source": "diseases/tomato_late_blight.txt",
+    "filename": "tomato_late_blight.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Late Blight",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Late Blight\nSymptoms: Dark, irregular water-soaked lesions may develop on leaves and stems. Under humid conditions, affected areas can expand rapidly.\nManagement: Remove severely affected tissue and reduce prolonged leaf wetness. Separate heavily affected plants where practical.\nPrevention: Maintain airflow, avoid unnecessary overhead watering, remove infected plant debris, and monitor plants during cool and humid weather.\nPlant Care: Inspect leaves frequently and respond quickly when rapidly expanding dark lesions appear."
+  },
+  {
+    "source": "diseases/tomato_leaf_mold.txt",
+    "filename": "tomato_leaf_mold.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Leaf Mold",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Leaf Mold\nSymptoms: Pale yellow areas may develop on the upper leaf surface, with olive-green to brown mold-like growth commonly appearing on the underside.\nManagement: Improve ventilation and reduce humidity around foliage. Remove severely affected leaves and avoid prolonged leaf wetness.\nPrevention: Provide adequate plant spacing, improve airflow, and water at the soil level when possible.\nPlant Care: Keep foliage dry and inspect both sides of leaves in humid growing conditions."
+  },
+  {
+    "source": "diseases/tomato_mosaic_virus.txt",
+    "filename": "tomato_mosaic_virus.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Mosaic Virus",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Mosaic Virus\nSymptoms: Leaves may show mottled light and dark green patterns, distortion, reduced growth, or irregular development.\nManagement: Remove strongly affected plants where appropriate and prevent mechanical spread through contaminated hands and tools.\nPrevention: Use clean planting material, wash hands and tools, control potential insect vectors where relevant, and avoid handling healthy plants immediately after infected plants.\nPlant Care: Monitor new leaves for mosaic patterns and unusual distortion."
+  },
+  {
+    "source": "diseases/tomato_septoria_leaf_spot.txt",
+    "filename": "tomato_septoria_leaf_spot.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Septoria Leaf Spot",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Septoria Leaf Spot\nSymptoms: Numerous small circular spots may develop on older leaves, often with pale centers and darker margins. Severe infection can cause leaf drop.\nManagement: Remove affected lower leaves and plant debris, improve airflow, and minimize leaf wetness.\nPrevention: Provide adequate spacing, avoid overhead irrigation when possible, and remove infected debris after the growing season.\nPlant Care: Inspect older leaves regularly and maintain good ventilation around plants."
+  },
+  {
+    "source": "diseases/tomato_spider_mites.txt",
+    "filename": "tomato_spider_mites.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Spider Mites",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Spider Mites\nSymptoms: Fine webbing, stippled or speckled leaves, yellowing, and loss of leaf vigor may occur, especially during hot and dry conditions.\nManagement: Inspect leaf undersides and reduce plant stress. A strong but appropriate water spray can help dislodge mites on suitable plants.\nPrevention: Avoid excessive plant stress and dusty conditions, and regularly inspect plants during hot, dry weather.\nPlant Care: Maintain appropriate moisture and check the undersides of leaves for mites and webbing."
+  },
+  {
+    "source": "diseases/tomato_target_spot.txt",
+    "filename": "tomato_target_spot.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Target Spot",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Target Spot\nSymptoms: Brown circular lesions can develop on leaves and may show concentric target-like rings. Fruit may also develop dark lesions.\nManagement: Remove severely affected foliage, improve airflow, and reduce prolonged leaf wetness.\nPrevention: Remove infected plant debris, provide adequate spacing, and avoid unnecessary overhead irrigation.\nPlant Care: Monitor leaves and fruit regularly, especially under warm and humid conditions."
+  },
+  {
+    "source": "diseases/tomato_yellow_leaf_curl_virus.txt",
+    "filename": "tomato_yellow_leaf_curl_virus.txt",
+    "category": "disease",
+    "plant": "Tomato",
+    "disease": "Yellow Leaf Curl Virus",
+    "condition": null,
+    "text": "﻿Plant: Tomato\nDisease: Yellow Leaf Curl Virus\nSymptoms: Leaves may curl upward, become yellow, and show reduced growth. Plants can become stunted and fruit production may decline.\nManagement: Remove severely affected plants where appropriate and manage insect vectors such as whiteflies according to locally appropriate integrated pest management practices.\nPrevention: Use healthy planting material, monitor for whiteflies, remove infected plants when practical, and control weeds that may support insect populations.\nPlant Care: Inspect new growth frequently for curling, yellowing, and stunting."
+  },
+  {
+    "source": "general_care.txt",
+    "filename": "general_care.txt",
+    "category": "general",
+    "plant": null,
+    "disease": null,
+    "condition": null,
+    "text": "General Plant Care\nYellow leaves can have multiple causes including overwatering, poor drainage, insufficient light, nutrient imbalance, natural aging, or disease.\nBefore watering, check the soil moisture rather than watering on a fixed schedule alone.\nGood drainage and appropriate light are important for most houseplants.\nFertilizer should be selected according to the plant type and applied according to label directions.\nIf disease is suspected, isolate the affected plant where practical and avoid sharing unclean tools."
+  },
+  {
+    "source": "healthy/apple_healthy.txt",
+    "filename": "apple_healthy.txt",
+    "category": "healthy",
+    "plant": "Apple",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Apple\nCondition: Healthy\nCare:\nProvide full sun and well-drained soil with organic matter. Water deeply when the soil begins to dry, especially during hot or dry weather.\nPrevention:\nMaintain good airflow, remove fallen plant debris, monitor leaves and fruit regularly, and avoid unnecessary leaf wetness.\nGeneral Guidance:\nHealthy plants should be monitored regularly for changes in leaves, stems, and fruit."
+  },
+  {
+    "source": "healthy/blueberry_healthy.txt",
+    "filename": "blueberry_healthy.txt",
+    "category": "healthy",
+    "plant": "Blueberry",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Blueberry\nCondition: Healthy\nCare:\nProvide suitable sunlight, well-drained soil, and consistent moisture without waterlogging.\nPrevention:\nMaintain good airflow, keep the growing area clean, and monitor leaves and fruit regularly for signs of disease or stress.\nGeneral Guidance:\nAvoid both prolonged drought and excessive watering. Adjust care according to local growing conditions."
+  },
+  {
+    "source": "healthy/cherry_healthy.txt",
+    "filename": "cherry_healthy.txt",
+    "category": "healthy",
+    "plant": "Cherry",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Cherry\nCondition: Healthy\nCare:\nProvide adequate sunlight and well-drained soil. Maintain appropriate soil moisture without prolonged waterlogging.\nPrevention:\nMaintain good airflow, remove diseased or fallen plant material where practical, and regularly inspect leaves, flowers, and fruit.\nGeneral Guidance:\nHealthy plants should be monitored regularly so early signs of disease or environmental stress can be identified."
+  },
+  {
+    "source": "healthy/corn_healthy.txt",
+    "filename": "corn_healthy.txt",
+    "category": "healthy",
+    "plant": "Corn",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Corn\nCondition: Healthy\nCare:\nProvide adequate sunlight, suitable soil moisture, and balanced nutrients appropriate for the crop growth stage.\nPrevention:\nMonitor leaves regularly, maintain appropriate plant spacing, manage crop residues, and use healthy planting material.\nGeneral Guidance:\nAvoid both prolonged drought and waterlogging. Regular monitoring helps identify disease or nutrient problems early."
+  },
+  {
+    "source": "healthy/grape_healthy.txt",
+    "filename": "grape_healthy.txt",
+    "category": "healthy",
+    "plant": "Grape",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Grape\nCondition: Healthy\nCare:\nProvide adequate sunlight, well-drained soil, suitable irrigation, and good canopy airflow.\nPrevention:\nMonitor leaves, shoots, and fruit regularly. Maintain sanitation and remove diseased or fallen plant material where practical.\nGeneral Guidance:\nAvoid prolonged leaf wetness and maintain balanced plant nutrition appropriate for the growing stage."
+  },
+  {
+    "source": "healthy/peach_healthy.txt",
+    "filename": "peach_healthy.txt",
+    "category": "healthy",
+    "plant": "Peach",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Peach\nCondition: Healthy\nCare:\nProvide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.\nPrevention:\nMonitor leaves, shoots, and fruit regularly. Maintain good airflow and remove diseased or fallen plant material where practical.\nGeneral Guidance:\nBalanced nutrition, appropriate irrigation, and regular monitoring support healthy growth."
+  },
+  {
+    "source": "healthy/pepper_bell_healthy.txt",
+    "filename": "pepper_bell_healthy.txt",
+    "category": "healthy",
+    "plant": "Pepper Bell",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Pepper Bell\nCondition: Healthy\nCare:\nProvide adequate sunlight, well-drained fertile soil, and consistent moisture without waterlogging.\nPrevention:\nMaintain good airflow, monitor leaves and fruit regularly, keep tools clean, and avoid unnecessary prolonged leaf wetness.\nGeneral Guidance:\nProvide balanced nutrition appropriate for the growth stage and monitor the plant regularly for early signs of stress or disease."
+  },
+  {
+    "source": "healthy/potato_healthy.txt",
+    "filename": "potato_healthy.txt",
+    "category": "healthy",
+    "plant": "Potato",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Potato\nCondition: Healthy\nCare:\nKeep soil consistently moist, especially during tuber development, but avoid waterlogging. Provide full sun and loose, well-drained soil.\nPrevention:\nPractice crop rotation, maintain good airflow, use healthy planting material, and monitor leaves regularly.\nGeneral Guidance:\nAvoid prolonged leaf wetness and maintain balanced nutrition appropriate for crop growth."
+  },
+  {
+    "source": "healthy/raspberry_healthy.txt",
+    "filename": "raspberry_healthy.txt",
+    "category": "healthy",
+    "plant": "Raspberry",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Raspberry\nCondition: Healthy\nCare:\nProvide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.\nPrevention:\nMaintain good airflow, keep the growing area clean, and monitor leaves, flowers, and fruit regularly.\nGeneral Guidance:\nUse appropriate support and pruning practices where needed and maintain balanced nutrition."
+  },
+  {
+    "source": "healthy/soybean_healthy.txt",
+    "filename": "soybean_healthy.txt",
+    "category": "healthy",
+    "plant": "Soybean",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Soybean\nCondition: Healthy\nCare:\nProvide adequate sunlight, suitable soil moisture, and well-drained soil. Maintain nutrition appropriate for the crop growth stage.\nPrevention:\nUse healthy seed, monitor plants regularly, maintain suitable field conditions, and manage weeds appropriately.\nGeneral Guidance:\nAvoid prolonged waterlogging and monitor leaves and stems for early signs of disease or nutrient stress."
+  },
+  {
+    "source": "healthy/strawberry_healthy.txt",
+    "filename": "strawberry_healthy.txt",
+    "category": "healthy",
+    "plant": "Strawberry",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Strawberry\nCondition: Healthy\nCare:\nProvide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.\nPrevention:\nMaintain clean growing areas, good airflow, appropriate spacing, and monitor leaves and fruit regularly.\nGeneral Guidance:\nWater near the soil rather than unnecessarily wetting foliage and remove damaged or diseased plant material where practical."
+  },
+  {
+    "source": "healthy/tomato_healthy.txt",
+    "filename": "tomato_healthy.txt",
+    "category": "healthy",
+    "plant": "Tomato",
+    "disease": null,
+    "condition": "Healthy",
+    "text": "﻿Plant: Tomato\nCondition: Healthy\nCare: Provide adequate sunlight, consistent soil moisture without waterlogging, good drainage, and sufficient airflow. Water near the soil surface when possible.\nPrevention: Monitor leaves and stems regularly, remove dead plant material, keep tools clean, and maintain appropriate spacing.\nGeneral Guidance: Healthy tomato plants should be monitored regularly so that changes in leaf color, shape, spots, or growth can be detected early."
+  },
+  {
+    "source": "potato.txt",
+    "filename": "potato.txt",
+    "category": "general",
+    "plant": "Potato",
+    "disease": null,
+    "condition": null,
+    "text": "Plant: Potato\nWatering: Keep soil consistently moist, especially during tuber development, but avoid waterlogging.\nSunlight: Full sun is preferred.\nSoil: Loose, well-drained soil.\nCommon problems: Early blight and late blight.\nCare: Rotate crops, maintain airflow, remove heavily infected foliage, and avoid prolonged leaf wetness."
+  },
+  {
+    "source": "tomato.txt",
+    "filename": "tomato.txt",
+    "category": "general",
+    "plant": "Tomato",
+    "disease": null,
+    "condition": null,
+    "text": "Plant: Tomato\nWatering: Keep soil evenly moist but not waterlogged. Check the top layer before watering.\nSunlight: Usually prefers about 6-8 hours of direct sunlight.\nSoil: Well-drained fertile soil.\nCommon problems: Early blight, late blight, leaf mold, nutrient deficiency.\nCare: Improve airflow, avoid wetting leaves unnecessarily, remove severely infected leaves, and keep tools clean."
+  }
+]

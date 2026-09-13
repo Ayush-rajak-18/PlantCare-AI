@@ -8,8 +8,4 @@ backend/.env
 
 backend/dataset/
 
-backend/rag/index.faiss
-backend/rag/metadata.json
-
-backend/ai/model/*.keras
 backend/ai/model/classes.txt
