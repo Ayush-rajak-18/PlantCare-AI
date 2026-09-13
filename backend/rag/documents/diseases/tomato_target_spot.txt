@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Target Spot
+Symptoms: Brown circular lesions can develop on leaves and may show concentric target-like rings. Fruit may also develop dark lesions.
+Management: Remove severely affected foliage, improve airflow, and reduce prolonged leaf wetness.
+Prevention: Remove infected plant debris, provide adequate spacing, and avoid unnecessary overhead irrigation.
+Plant Care: Monitor leaves and fruit regularly, especially under warm and humid conditions.

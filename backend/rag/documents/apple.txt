@@ -1,0 +1,6 @@
+Plant: Apple
+Watering: Water deeply when the soil begins to dry, especially during establishment and hot weather.
+Sunlight: Full sun is preferred for good growth and fruiting.
+Soil: Well-drained soil with organic matter.
+Common problems: Apple scab and black rot.
+Care: Remove fallen infected leaves and fruit, prune for airflow, and avoid unnecessary leaf wetness.

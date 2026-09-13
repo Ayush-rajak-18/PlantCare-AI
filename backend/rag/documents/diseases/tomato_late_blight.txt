@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Late Blight
+Symptoms: Dark, irregular water-soaked lesions may develop on leaves and stems. Under humid conditions, affected areas can expand rapidly.
+Management: Remove severely affected tissue and reduce prolonged leaf wetness. Separate heavily affected plants where practical.
+Prevention: Maintain airflow, avoid unnecessary overhead watering, remove infected plant debris, and monitor plants during cool and humid weather.
+Plant Care: Inspect leaves frequently and respond quickly when rapidly expanding dark lesions appear.

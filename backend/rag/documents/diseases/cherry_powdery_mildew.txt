@@ -1,0 +1,10 @@
+﻿Plant: Cherry
+Disease: Powdery Mildew
+Symptoms:
+A white, powdery fungal growth may appear on leaves and young shoots. Infected growth can become distorted or weakened.
+Management:
+Remove severely affected plant material where practical and improve airflow around the plant. Avoid excessive humidity around foliage.
+Prevention:
+Maintain good spacing and airflow, monitor new growth regularly, and avoid unnecessary prolonged leaf wetness.
+Plant Care:
+Provide appropriate sunlight, well-drained soil, and balanced moisture.

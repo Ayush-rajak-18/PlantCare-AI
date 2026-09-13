@@ -1,0 +1,10 @@
+﻿Plant: Strawberry
+Disease: Leaf Scorch
+Symptoms:
+Small dark purple, reddish, or brown spots can develop on strawberry leaves. Spots may enlarge and cause affected tissue to appear scorched.
+Management:
+Remove severely affected leaves where practical and maintain good airflow. Keep the growing area clean.
+Prevention:
+Avoid prolonged leaf wetness, maintain appropriate spacing, remove infected plant debris, and monitor plants regularly.
+Plant Care:
+Provide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.

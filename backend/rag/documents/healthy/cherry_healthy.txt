@@ -1,0 +1,8 @@
+﻿Plant: Cherry
+Condition: Healthy
+Care:
+Provide adequate sunlight and well-drained soil. Maintain appropriate soil moisture without prolonged waterlogging.
+Prevention:
+Maintain good airflow, remove diseased or fallen plant material where practical, and regularly inspect leaves, flowers, and fruit.
+General Guidance:
+Healthy plants should be monitored regularly so early signs of disease or environmental stress can be identified.

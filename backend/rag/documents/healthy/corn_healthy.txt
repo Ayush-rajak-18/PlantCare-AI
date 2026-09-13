@@ -1,0 +1,8 @@
+﻿Plant: Corn
+Condition: Healthy
+Care:
+Provide adequate sunlight, suitable soil moisture, and balanced nutrients appropriate for the crop growth stage.
+Prevention:
+Monitor leaves regularly, maintain appropriate plant spacing, manage crop residues, and use healthy planting material.
+General Guidance:
+Avoid both prolonged drought and waterlogging. Regular monitoring helps identify disease or nutrient problems early.

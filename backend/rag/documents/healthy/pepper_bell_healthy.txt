@@ -1,0 +1,8 @@
+﻿Plant: Pepper Bell
+Condition: Healthy
+Care:
+Provide adequate sunlight, well-drained fertile soil, and consistent moisture without waterlogging.
+Prevention:
+Maintain good airflow, monitor leaves and fruit regularly, keep tools clean, and avoid unnecessary prolonged leaf wetness.
+General Guidance:
+Provide balanced nutrition appropriate for the growth stage and monitor the plant regularly for early signs of stress or disease.

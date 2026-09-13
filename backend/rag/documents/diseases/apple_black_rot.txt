@@ -1,0 +1,10 @@
+﻿Plant: Apple
+Disease: Black Rot
+Symptoms:
+Dark, enlarging lesions can occur on leaves, fruit, and branches. Fruit may develop dark rot and eventually shrivel.
+Management:
+Remove infected fruit and plant material. Prune affected areas where appropriate and maintain good airflow.
+Prevention:
+Keep the growing area clean, remove fallen or diseased material, and avoid unnecessary leaf wetness.
+Plant Care:
+Provide full sun and well-drained soil. Maintain appropriate watering and avoid waterlogging.

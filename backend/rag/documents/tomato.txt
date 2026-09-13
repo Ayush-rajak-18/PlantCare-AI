@@ -1,0 +1,6 @@
+Plant: Tomato
+Watering: Keep soil evenly moist but not waterlogged. Check the top layer before watering.
+Sunlight: Usually prefers about 6-8 hours of direct sunlight.
+Soil: Well-drained fertile soil.
+Common problems: Early blight, late blight, leaf mold, nutrient deficiency.
+Care: Improve airflow, avoid wetting leaves unnecessarily, remove severely infected leaves, and keep tools clean.

@@ -1,0 +1,15 @@
+node_modules/
+frontend/dist/
+
+backend/venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.env
+
+backend/dataset/
+
+backend/rag/index.faiss
+backend/rag/metadata.json
+
+backend/ai/model/*.keras
+backend/ai/model/classes.txt

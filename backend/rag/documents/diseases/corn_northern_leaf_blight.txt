@@ -1,0 +1,10 @@
+﻿Plant: Corn
+Disease: Northern Leaf Blight
+Symptoms:
+Long, elongated gray-green to tan lesions can develop on corn leaves and may expand significantly under favorable conditions.
+Management:
+Monitor plants regularly and manage infected crop residue according to local agricultural recommendations.
+Prevention:
+Crop rotation, residue management, and appropriate plant spacing can help reduce disease pressure.
+Plant Care:
+Maintain adequate soil moisture and balanced nutrition and avoid prolonged wetness on foliage where practical.

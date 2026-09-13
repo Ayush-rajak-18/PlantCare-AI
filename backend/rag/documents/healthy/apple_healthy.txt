@@ -1,0 +1,8 @@
+﻿Plant: Apple
+Condition: Healthy
+Care:
+Provide full sun and well-drained soil with organic matter. Water deeply when the soil begins to dry, especially during hot or dry weather.
+Prevention:
+Maintain good airflow, remove fallen plant debris, monitor leaves and fruit regularly, and avoid unnecessary leaf wetness.
+General Guidance:
+Healthy plants should be monitored regularly for changes in leaves, stems, and fruit.

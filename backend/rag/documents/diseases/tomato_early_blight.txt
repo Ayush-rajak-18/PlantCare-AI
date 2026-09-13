@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Early Blight
+Symptoms: Dark brown lesions with concentric ring patterns commonly develop on older leaves. Severe infection can cause yellowing and leaf drop.
+Management: Remove badly affected leaves, improve airflow, and avoid prolonged leaf wetness.
+Prevention: Rotate crops where practical, remove infected plant debris, and keep foliage from contacting wet soil.
+Plant Care: Water at the soil surface when possible and monitor lower leaves regularly.

@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Bacterial Spot
+Symptoms: Small dark water-soaked spots may appear on leaves, stems, and fruit. Spots can enlarge and become rough or scabby.
+Management: Remove severely affected plant material and keep foliage as dry as practical. Improve airflow and avoid working with plants when leaves are wet.
+Prevention: Use clean planting material, sanitize tools, provide adequate spacing, and avoid unnecessary overhead irrigation.
+Plant Care: Monitor new growth regularly and maintain good drainage, sunlight, and airflow.

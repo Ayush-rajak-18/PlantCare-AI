@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Yellow Leaf Curl Virus
+Symptoms: Leaves may curl upward, become yellow, and show reduced growth. Plants can become stunted and fruit production may decline.
+Management: Remove severely affected plants where appropriate and manage insect vectors such as whiteflies according to locally appropriate integrated pest management practices.
+Prevention: Use healthy planting material, monitor for whiteflies, remove infected plants when practical, and control weeds that may support insect populations.
+Plant Care: Inspect new growth frequently for curling, yellowing, and stunting.

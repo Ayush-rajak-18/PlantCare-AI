@@ -1,0 +1,10 @@
+﻿Plant: Corn
+Disease: Gray Leaf Spot
+Symptoms:
+Gray to tan rectangular lesions can develop on corn leaves, often expanding along the leaf veins.
+Management:
+Monitor disease development and remove or manage infected crop residue according to local agricultural guidance.
+Prevention:
+Crop rotation and residue management can reduce disease pressure. Maintain suitable plant spacing and field airflow.
+Plant Care:
+Provide adequate moisture and balanced nutrition while avoiding unnecessary prolonged leaf wetness.

@@ -1,0 +1,6 @@
+Plant: Potato
+Watering: Keep soil consistently moist, especially during tuber development, but avoid waterlogging.
+Sunlight: Full sun is preferred.
+Soil: Loose, well-drained soil.
+Common problems: Early blight and late blight.
+Care: Rotate crops, maintain airflow, remove heavily infected foliage, and avoid prolonged leaf wetness.

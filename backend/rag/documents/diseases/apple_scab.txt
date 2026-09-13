@@ -1,0 +1,10 @@
+﻿Plant: Apple
+Disease: Apple Scab
+Symptoms:
+Olive-green to brown spots can develop on leaves and fruit. Severe infection may cause leaf drop and affected fruit.
+Management:
+Remove and dispose of fallen infected leaves and affected fruit. Improve airflow by appropriate pruning. Avoid unnecessary leaf wetness.
+Prevention:
+Maintain good orchard sanitation, improve airflow, and avoid prolonged moisture on foliage.
+Plant Care:
+Provide full sun and well-drained soil. Water the root zone rather than repeatedly wetting the leaves.

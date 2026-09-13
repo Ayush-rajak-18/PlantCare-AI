@@ -1,0 +1,8 @@
+﻿Plant: Peach
+Condition: Healthy
+Care:
+Provide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.
+Prevention:
+Monitor leaves, shoots, and fruit regularly. Maintain good airflow and remove diseased or fallen plant material where practical.
+General Guidance:
+Balanced nutrition, appropriate irrigation, and regular monitoring support healthy growth.

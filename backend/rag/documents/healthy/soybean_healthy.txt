@@ -1,0 +1,8 @@
+﻿Plant: Soybean
+Condition: Healthy
+Care:
+Provide adequate sunlight, suitable soil moisture, and well-drained soil. Maintain nutrition appropriate for the crop growth stage.
+Prevention:
+Use healthy seed, monitor plants regularly, maintain suitable field conditions, and manage weeds appropriately.
+General Guidance:
+Avoid prolonged waterlogging and monitor leaves and stems for early signs of disease or nutrient stress.

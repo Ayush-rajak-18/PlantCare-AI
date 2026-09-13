@@ -1,0 +1,10 @@
+﻿Plant: Grape
+Disease: Esca
+Symptoms:
+Esca is associated with wood-decay fungi and may cause leaf symptoms, reduced vine vigor, and decline of affected grapevines.
+Management:
+Remove severely affected or dead plant material where practical and maintain vineyard sanitation. Follow local agricultural guidance for management.
+Prevention:
+Use healthy planting material, make careful pruning cuts, and avoid unnecessary wounds to the vine.
+Plant Care:
+Provide adequate sunlight, appropriate irrigation, and good canopy airflow.

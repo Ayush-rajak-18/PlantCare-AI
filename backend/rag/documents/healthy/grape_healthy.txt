@@ -1,0 +1,8 @@
+﻿Plant: Grape
+Condition: Healthy
+Care:
+Provide adequate sunlight, well-drained soil, suitable irrigation, and good canopy airflow.
+Prevention:
+Monitor leaves, shoots, and fruit regularly. Maintain sanitation and remove diseased or fallen plant material where practical.
+General Guidance:
+Avoid prolonged leaf wetness and maintain balanced plant nutrition appropriate for the growing stage.

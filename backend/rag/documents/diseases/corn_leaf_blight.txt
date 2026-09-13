@@ -1,0 +1,10 @@
+﻿Plant: Corn
+Disease: Leaf Blight
+Symptoms:
+Leaf blight can produce brown or tan lesions on corn leaves. Severe infection can reduce photosynthetic leaf area.
+Management:
+Monitor affected plants and manage infected crop residue appropriately. Follow local agricultural recommendations for disease control.
+Prevention:
+Use healthy planting material, maintain crop rotation where appropriate, and reduce conditions that favor prolonged leaf wetness.
+Plant Care:
+Maintain adequate soil moisture and balanced nutrition.

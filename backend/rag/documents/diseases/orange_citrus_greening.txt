@@ -1,0 +1,10 @@
+﻿Plant: Orange
+Disease: Citrus Greening
+Symptoms:
+Citrus greening can cause yellowing or mottled leaves, reduced tree vigor, and small or poorly colored fruit. Symptoms can vary across the tree.
+Management:
+Monitor trees regularly and follow local agricultural recommendations for management. Control of the insect vector and removal of severely affected trees may be recommended in affected production areas.
+Prevention:
+Use healthy, certified planting material where available and monitor for insect vectors. Follow regional citrus disease-management guidance.
+Plant Care:
+Provide adequate sunlight, appropriate irrigation, good drainage, and balanced nutrition.

@@ -1,0 +1,10 @@
+﻿Plant: Apple
+Disease: Rust
+Symptoms:
+Rust diseases can cause yellow, orange, or reddish lesions on leaves and may reduce plant vigor when infection is severe.
+Management:
+Remove heavily affected plant material where practical and improve airflow around the plant.
+Prevention:
+Maintain sanitation, good airflow, and avoid prolonged leaf wetness.
+Plant Care:
+Grow in full sun with well-drained soil and provide adequate moisture without waterlogging.

@@ -1,0 +1,8 @@
+﻿Plant: Strawberry
+Condition: Healthy
+Care:
+Provide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.
+Prevention:
+Maintain clean growing areas, good airflow, appropriate spacing, and monitor leaves and fruit regularly.
+General Guidance:
+Water near the soil rather than unnecessarily wetting foliage and remove damaged or diseased plant material where practical.

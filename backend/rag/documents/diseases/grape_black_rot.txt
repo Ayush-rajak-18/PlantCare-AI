@@ -1,0 +1,10 @@
+﻿Plant: Grape
+Disease: Black Rot
+Symptoms:
+Small reddish-brown lesions may develop on leaves and berries. Infected berries can darken, shrivel, and develop black fruiting structures.
+Management:
+Remove infected berries and plant debris where practical. Improve canopy airflow and avoid unnecessary prolonged leaf wetness.
+Prevention:
+Maintain good vineyard sanitation, appropriate spacing, and airflow. Remove mummified fruit and infected debris.
+Plant Care:
+Provide adequate sunlight, well-drained soil, and appropriate irrigation without prolonged leaf wetness.

@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Spider Mites
+Symptoms: Fine webbing, stippled or speckled leaves, yellowing, and loss of leaf vigor may occur, especially during hot and dry conditions.
+Management: Inspect leaf undersides and reduce plant stress. A strong but appropriate water spray can help dislodge mites on suitable plants.
+Prevention: Avoid excessive plant stress and dusty conditions, and regularly inspect plants during hot, dry weather.
+Plant Care: Maintain appropriate moisture and check the undersides of leaves for mites and webbing.

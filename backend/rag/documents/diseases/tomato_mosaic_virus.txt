@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Mosaic Virus
+Symptoms: Leaves may show mottled light and dark green patterns, distortion, reduced growth, or irregular development.
+Management: Remove strongly affected plants where appropriate and prevent mechanical spread through contaminated hands and tools.
+Prevention: Use clean planting material, wash hands and tools, control potential insect vectors where relevant, and avoid handling healthy plants immediately after infected plants.
+Plant Care: Monitor new leaves for mosaic patterns and unusual distortion.

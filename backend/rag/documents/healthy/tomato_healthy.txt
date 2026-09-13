@@ -1,0 +1,5 @@
+﻿Plant: Tomato
+Condition: Healthy
+Care: Provide adequate sunlight, consistent soil moisture without waterlogging, good drainage, and sufficient airflow. Water near the soil surface when possible.
+Prevention: Monitor leaves and stems regularly, remove dead plant material, keep tools clean, and maintain appropriate spacing.
+General Guidance: Healthy tomato plants should be monitored regularly so that changes in leaf color, shape, spots, or growth can be detected early.

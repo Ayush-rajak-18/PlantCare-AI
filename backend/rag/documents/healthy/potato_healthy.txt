@@ -1,0 +1,8 @@
+﻿Plant: Potato
+Condition: Healthy
+Care:
+Keep soil consistently moist, especially during tuber development, but avoid waterlogging. Provide full sun and loose, well-drained soil.
+Prevention:
+Practice crop rotation, maintain good airflow, use healthy planting material, and monitor leaves regularly.
+General Guidance:
+Avoid prolonged leaf wetness and maintain balanced nutrition appropriate for crop growth.

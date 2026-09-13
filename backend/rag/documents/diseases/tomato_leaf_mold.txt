@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Leaf Mold
+Symptoms: Pale yellow areas may develop on the upper leaf surface, with olive-green to brown mold-like growth commonly appearing on the underside.
+Management: Improve ventilation and reduce humidity around foliage. Remove severely affected leaves and avoid prolonged leaf wetness.
+Prevention: Provide adequate plant spacing, improve airflow, and water at the soil level when possible.
+Plant Care: Keep foliage dry and inspect both sides of leaves in humid growing conditions.

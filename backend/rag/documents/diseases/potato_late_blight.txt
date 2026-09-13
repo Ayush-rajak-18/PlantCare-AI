@@ -1,0 +1,10 @@
+﻿Plant: Potato
+Disease: Late Blight
+Symptoms:
+Water-soaked or dark lesions may develop on leaves and stems. Under favorable conditions, lesions can expand rapidly and infected tissue may die.
+Management:
+Remove heavily infected foliage where practical and follow local agricultural recommendations for disease management. Avoid prolonged leaf wetness.
+Prevention:
+Use healthy planting material, maintain good field sanitation, improve airflow, and avoid unnecessary overhead irrigation.
+Plant Care:
+Keep soil adequately moist without waterlogging. Provide full sun and well-drained soil.

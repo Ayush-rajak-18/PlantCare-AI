@@ -1,0 +1,10 @@
+﻿Plant: Peach
+Disease: Bacterial Spot
+Symptoms:
+Small dark spots can develop on leaves and fruit. Severe leaf infection may cause shot-hole symptoms and premature leaf drop.
+Management:
+Remove severely affected plant material where practical and maintain good airflow. Follow local agricultural recommendations for bacterial disease management.
+Prevention:
+Use healthy planting material, maintain sanitation, and avoid unnecessary prolonged leaf wetness.
+Plant Care:
+Provide adequate sunlight, well-drained soil, and appropriate irrigation.

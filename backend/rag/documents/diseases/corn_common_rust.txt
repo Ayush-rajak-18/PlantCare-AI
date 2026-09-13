@@ -1,0 +1,10 @@
+﻿Plant: Corn
+Disease: Common Rust
+Symptoms:
+Small reddish-brown to rust-colored pustules may appear on corn leaves. Severe infection can reduce healthy leaf area.
+Management:
+Monitor plants regularly and manage the disease according to local agricultural recommendations. Remove severely affected material where practical.
+Prevention:
+Use healthy planting material, maintain appropriate plant spacing, and avoid conditions that keep foliage wet for long periods.
+Plant Care:
+Provide adequate sunlight, suitable soil moisture, and balanced nutrition.

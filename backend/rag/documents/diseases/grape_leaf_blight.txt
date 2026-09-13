@@ -1,0 +1,10 @@
+﻿Plant: Grape
+Disease: Leaf Blight
+Symptoms:
+Leaf blight can produce discolored or necrotic areas on grape leaves and may reduce healthy leaf area when infection is severe.
+Management:
+Remove severely affected plant material where practical and improve canopy airflow. Avoid unnecessary prolonged leaf wetness.
+Prevention:
+Maintain vineyard sanitation, suitable plant spacing, and good airflow. Monitor leaves regularly.
+Plant Care:
+Provide adequate sunlight, well-drained soil, and appropriate irrigation.

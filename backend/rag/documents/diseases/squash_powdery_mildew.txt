@@ -1,0 +1,10 @@
+﻿Plant: Squash
+Disease: Powdery Mildew
+Symptoms:
+White, powder-like fungal growth can appear on leaves and stems. Severely affected leaves may become yellow, dry, or weakened.
+Management:
+Remove severely affected leaves where practical and improve airflow around plants. Follow local agricultural recommendations for disease management.
+Prevention:
+Provide adequate plant spacing, good airflow, and avoid excessive conditions that favor disease development.
+Plant Care:
+Provide suitable sunlight, consistent soil moisture, and well-drained soil. Avoid unnecessary prolonged leaf wetness.

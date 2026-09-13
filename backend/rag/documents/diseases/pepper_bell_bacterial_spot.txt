@@ -1,0 +1,10 @@
+﻿Plant: Pepper Bell
+Disease: Bacterial Spot
+Symptoms:
+Small water-soaked or dark lesions may develop on leaves, stems, and fruit. Severe infection can cause leaf loss and blemished fruit.
+Management:
+Remove severely affected plant material where practical. Avoid working with wet foliage and maintain good airflow.
+Prevention:
+Use healthy seed or planting material, maintain sanitation, avoid overhead irrigation when possible, and avoid unnecessary leaf wetness.
+Plant Care:
+Provide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.

@@ -1,0 +1,10 @@
+﻿Plant: Potato
+Disease: Early Blight
+Symptoms:
+Dark brown lesions with concentric ring patterns may develop on older leaves. Severe infection can cause leaf yellowing and premature leaf loss.
+Management:
+Remove heavily infected foliage where practical and maintain good field sanitation. Avoid prolonged leaf wetness.
+Prevention:
+Practice crop rotation, use healthy planting material, maintain appropriate plant nutrition, and reduce prolonged moisture on foliage.
+Plant Care:
+Keep soil consistently moist during tuber development but avoid waterlogging. Provide full sun and well-drained soil.

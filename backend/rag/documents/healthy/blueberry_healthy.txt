@@ -1,0 +1,8 @@
+﻿Plant: Blueberry
+Condition: Healthy
+Care:
+Provide suitable sunlight, well-drained soil, and consistent moisture without waterlogging.
+Prevention:
+Maintain good airflow, keep the growing area clean, and monitor leaves and fruit regularly for signs of disease or stress.
+General Guidance:
+Avoid both prolonged drought and excessive watering. Adjust care according to local growing conditions.

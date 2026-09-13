@@ -1,0 +1,8 @@
+﻿Plant: Raspberry
+Condition: Healthy
+Care:
+Provide adequate sunlight, well-drained soil, and consistent moisture without waterlogging.
+Prevention:
+Maintain good airflow, keep the growing area clean, and monitor leaves, flowers, and fruit regularly.
+General Guidance:
+Use appropriate support and pruning practices where needed and maintain balanced nutrition.

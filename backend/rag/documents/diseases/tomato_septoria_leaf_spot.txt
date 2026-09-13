@@ -1,0 +1,6 @@
+﻿Plant: Tomato
+Disease: Septoria Leaf Spot
+Symptoms: Numerous small circular spots may develop on older leaves, often with pale centers and darker margins. Severe infection can cause leaf drop.
+Management: Remove affected lower leaves and plant debris, improve airflow, and minimize leaf wetness.
+Prevention: Provide adequate spacing, avoid overhead irrigation when possible, and remove infected debris after the growing season.
+Plant Care: Inspect older leaves regularly and maintain good ventilation around plants.
