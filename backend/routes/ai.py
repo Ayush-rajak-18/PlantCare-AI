@@ -1,11 +1,10 @@
-
 from fastapi import APIRouter, UploadFile, File, Depends
 from PIL import Image
 from io import BytesIO
 
 from database import diagnoses
 from auth import get_current_user
-from services.disease_model import predict_image
+
 from services.care_data import get_care_recommendations
 from services.rag_service import retrieve
 
@@ -19,6 +18,9 @@ async def diagnose(
     user_id: str = Depends(get_current_user)
 ):
     image = Image.open(BytesIO(await file.read()))
+
+    # Load disease model only when diagnosis is requested
+    from services.disease_model import predict_image
 
     # 1. AI disease prediction
     result = predict_image(image)
