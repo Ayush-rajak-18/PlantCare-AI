@@ -26,7 +26,8 @@ import {
 } from "lucide-react";
 import "./index.css";
 
-const API = "https://plantcare-ai-d8ed.onrender.com/api";
+const API = "http://127.0.0.1:8000/api";
+
 /* =========================================================
    API HELPER
 ========================================================= */

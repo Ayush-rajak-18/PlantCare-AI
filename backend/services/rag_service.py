@@ -1,101 +1,126 @@
 from pathlib import Path
-import json
 import os
 import re
-import math
-from collections import Counter
+
+from database import diagnoses
 
 BASE = Path(__file__).resolve().parents[1] / "rag"
-META = BASE / "metadata.json"
+DOCS = BASE / "documents"
 
-_meta = []
-_loaded = False
+
+def _load_documents():
+    """
+    Load plant-care knowledge from text files.
+    No FAISS / SentenceTransformer dependency.
+    """
+    documents = []
+
+    if not DOCS.exists():
+        return documents
+
+    for path in DOCS.rglob("*.txt"):
+        try:
+            text = path.read_text(encoding="utf-8").strip()
+
+            if not text:
+                continue
+
+            relative = path.relative_to(DOCS)
+            parts = relative.parts
+
+            category = parts[0] if len(parts) > 1 else "general"
+            filename = path.stem
+
+            documents.append(
+                {
+                    "source": path.name,
+                    "path": str(relative),
+                    "category": category,
+                    "plant": "",
+                    "disease": "",
+                    "text": text,
+                }
+            )
+
+        except Exception as e:
+            print(f"[RAG] Could not read {path}: {e}")
+
+    return documents
+
+
+_documents = None
 
 
 def ensure_loaded():
-    global _meta, _loaded
+    global _documents
 
-    if _loaded:
-        return
-
-    _loaded = True
-
-    if META.exists():
-        try:
-            _meta = json.loads(META.read_text(encoding="utf-8"))
-        except Exception as e:
-            print(f"[rag_service] Failed to load metadata: {e}")
-            _meta = []
-    else:
-        _meta = []
+    if _documents is None:
+        print("[RAG] Loading lightweight knowledge base...")
+        _documents = _load_documents()
+        print(f"[RAG] Loaded {len(_documents)} documents")
 
 
-def _tokenize(text):
-    return re.findall(r"[a-zA-Z0-9]+", text.lower())
-
-
-def _score(question, text):
-    question_tokens = _tokenize(question)
-    text_tokens = _tokenize(text)
-
-    if not question_tokens or not text_tokens:
-        return 0.0
-
-    question_count = Counter(question_tokens)
-    text_count = Counter(text_tokens)
-
-    score = 0.0
-
-    for word, count in question_count.items():
-        if word in text_count:
-            score += min(count, text_count[word])
-
-    # Normalize score so results stay between 0 and 1
-    denominator = math.sqrt(
-        sum(v * v for v in question_count.values())
-        * sum(v * v for v in text_count.values())
+def _words(text):
+    return set(
+        re.findall(
+            r"[a-zA-Z0-9]+",
+            text.lower()
+        )
     )
-
-    if denominator == 0:
-        return 0.0
-
-    return min(score / denominator, 1.0)
 
 
 def retrieve(question, k=3):
+    """
+    Lightweight keyword-based retrieval.
+
+    This replaces FAISS + SentenceTransformer so Render
+    does not need Torch/CUDA dependencies.
+    """
     ensure_loaded()
 
-    if not _meta:
+    if not _documents:
         return []
 
-    results = []
+    question_words = _words(question)
 
-    for item in _meta:
-        text = item.get("text", "")
+    if not question_words:
+        return []
 
-        score = _score(question, text)
+    scored = []
 
-        results.append(
-            {
-                "score": float(score),
-                **item,
-            }
-        )
+    for document in _documents:
+        text_words = _words(document["text"])
 
-    results.sort(
+        if not text_words:
+            continue
+
+        common = question_words.intersection(text_words)
+
+        score = len(common)
+
+        if score > 0:
+            scored.append(
+                {
+                    "score": float(score),
+                    **document,
+                }
+            )
+
+    scored.sort(
         key=lambda item: item["score"],
         reverse=True
     )
 
-    return results[:k]
+    return scored[:k]
 
 
 def _call_free_llm(prompt: str):
     """
-    Groq OpenAI-compatible API.
-    GROQ_API_KEY and GROQ_MODEL are read from environment variables.
-    """
+    Optional Groq/OpenAI-compatible API call.
 
+    If GROQ_API_KEY is missing or the API fails,
+    the system automatically uses the local answer.
+    """
     api_key = os.getenv("GROQ_API_KEY", "").strip()
 
     if not api_key:
@@ -130,43 +155,51 @@ def _call_free_llm(prompt: str):
 
     except Exception as e:
         print(
-            f"[rag_service] Groq call failed, "
-            f"falling back to template answer: {e}"
+            f"[RAG] Groq call failed. "
+            f"Using local fallback. Error: {e}"
         )
         return None
 
 
-def _template_answer(question, hits, context):
+def _template_answer(question, hits):
     if not hits:
         return (
-            "The PlantCare AI knowledge base does not have "
-            "enough information for this question."
+            "I could not find relevant information in the "
+            "PlantCare knowledge base. Please provide more "
+            "details about the plant, symptoms, soil, light, "
+            "or watering condition."
         )
 
     lines = [
-        "Based on the PlantCare AI knowledge base:",
+        "Based on the PlantCare knowledge base:",
         ""
     ]
 
-    for h in hits:
-        source = h.get("source", "Knowledge Base")
+    for hit in hits:
         source_name = (
-            source
+            hit["source"]
             .replace(".txt", "")
             .replace("_", " ")
             .title()
         )
 
-        text = h.get("text", "").strip()
+        text = " ".join(
+            line.strip()
+            for line in hit["text"].splitlines()
+            if line.strip()
+        )
 
         lines.append(
             f"• {source_name}: {text}"
         )
 
-    lines.append("")
-    lines.append(
-        "Tip: Check soil moisture, light, leaf symptoms, "
-        "and watering routine before making major changes."
+    lines.extend(
+        [
+            "",
+            "Tip: Check soil moisture, light, "
+            "leaf symptoms and watering conditions "
+            "before changing your care routine."
+        ]
     )
 
     return "\n".join(lines)
@@ -176,21 +209,21 @@ def answer(question):
     hits = retrieve(question, k=3)
 
     context = "\n\n".join(
-        h.get("text", "")
-        for h in hits
-        if h.get("text")
+        hit["text"]
+        for hit in hits
     )
 
     text = None
 
     if context:
         prompt = (
-            "You are PlantCare AI, a plant-care assistant.\n"
-            "Answer using only the supplied plant-care context.\n"
-            "Be concise, practical and beginner-friendly.\n"
-            "If the context is insufficient, say that more "
-            "information is needed.\n"
-            "Do not claim certainty about plant disease.\n\n"
+            "You are PlantCare AI, a beginner-friendly "
+            "plant-care assistant.\n\n"
+            "Answer using the supplied knowledge-base "
+            "context. Keep the answer practical and concise. "
+            "Do not claim certainty about plant disease. "
+            "If the context is insufficient, clearly say "
+            "that more information is needed.\n\n"
             f"CONTEXT:\n{context}\n\n"
             f"QUESTION:\n{question}"
         )
@@ -200,20 +233,16 @@ def answer(question):
     if text is None:
         text = _template_answer(
             question,
-            hits,
-            context
+            hits
         )
 
     return {
         "answer": text,
         "sources": [
             {
-                "source": h.get("source", ""),
-                "score": round(
-                    float(h.get("score", 0)),
-                    4
-                ),
+                "source": hit["source"],
+                "score": hit["score"],
             }
-            for h in hits
+            for hit in hits
         ],
     }
