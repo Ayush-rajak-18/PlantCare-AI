@@ -110,7 +110,7 @@ Explain the system as:
 6. LLM response generation (when API key is enabled)
 7. Personalized plant-care recommendations
 
-
+python -m uvicorn main:app --host 0.0.0.0 --port $PORT --log-level debug
 
  1. for start venv
 
