@@ -12,7 +12,7 @@ from PIL import Image
 
 BASE = Path(__file__).resolve().parents[1]
 
-MODEL_PATH = BASE / "ai" / "model" / "plant_disease_model.keras"
+MODEL_PATH = BASE / "ai" / "model" / "plant_disease_model.h5"
 CLASS_NAMES_PATH = BASE / "ai" / "model" / "class_names.json"
 
 IMAGE_SIZE = (224, 224)
