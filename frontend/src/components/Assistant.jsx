@@ -48,11 +48,11 @@ function Assistant({ user }) {
   const quickQuestions = [
     {
       icon: "🍃",
-      text: "Why are my tomato leaves turning yellow?",
+      text: "Why are my graps leaves turning yellow?",
     },
     {
       icon: "💧",
-      text: "How often should I water my plant?",
+      text: "How often should I water my cherry?",
     },
     {
       icon: "🦠",

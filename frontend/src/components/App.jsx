@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard";
 import Plants from "./Plants";
 import Doctor from "./Doctor";
 import Assistant from "./Assistant";
+import Footer from "./Footer";
 import ProjectInfo from "./ProjectInfo";
 const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu } = Icons;
 
@@ -41,6 +42,14 @@ function App() {
       loadPlants();
     }
   }, [user]);
+
+  useEffect(() => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "instant",
+  });
+}, [page]);
 
   useEffect(() => {
     if (!toast) return;
@@ -268,27 +277,9 @@ function App() {
         )}
 
                 
-          <footer className="mt-9 pt-5 border-t border-emerald-100">
-            <div className="relative text-center">
-
-              <p className="text-[11px] text-slate-400">
-                PlantCare AI © 2026
-              </p>
-
-              <p className="text-[11px] text-emerald-700 font-bold mt-1">
-                Developed by Kritika Bunkar • B.Tech AI & Data Science • AKS University
-              </p>
-
-              <button
-                type="button"
-                onClick={() => setPage("project-info")}
-                className="absolute right-0 bottom-0 text-[11px] sm:text-xs font-bold text-slate-500 hover:text-emerald-700 transition underline underline-offset-4"
-              >
-                About Project
-              </button>
-
-            </div>
-          </footer>
+          <Footer
+  onAbout={() => setPage("project-info")}
+/>
 
 
       </main>
