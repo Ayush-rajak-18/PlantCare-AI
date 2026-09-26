@@ -9,6 +9,7 @@ import Doctor from "./Doctor";
 import Assistant from "./Assistant";
 import Footer from "./Footer";
 import ProjectInfo from "./ProjectInfo";
+
 const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu, Smartphone, Download } = Icons;
 
 function App() {
@@ -37,25 +38,43 @@ function App() {
       localStorage.setItem("plantcare_current_page", nextPage);
     } catch {}
   };
+
   const [plants, setPlants] = useState([]);
   const [toast, setToast] = useState("");
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [showInstallPopup, setShowInstallPopup] = useState(false);
 
   useEffect(() => {
     const handler = (event) => {
       event.preventDefault();
       setInstallPrompt(event);
+      setShowInstallPopup(true);
     };
+
     window.addEventListener("beforeinstallprompt", handler);
+
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
   async function installApp() {
     if (!installPrompt) return;
-    installPrompt.prompt();
-    await installPrompt.userChoice.catch(() => null);
-    setInstallPrompt(null);
+
+    try {
+      installPrompt.prompt();
+
+      await installPrompt.userChoice.catch(() => null);
+
+      setInstallPrompt(null);
+      setShowInstallPopup(false);
+    } catch {
+      setShowInstallPopup(false);
+    }
   }
+
+  function closeInstallPopup() {
+    setShowInstallPopup(false);
+  }
+
   const diagnosisKey =
     "plantcare_diagnosis_count_" +
     (storedEmail || storedName || "user").toLowerCase().replace(/[^a-z0-9]/g, "_");
@@ -90,12 +109,12 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: "instant",
-  });
-}, [page]);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, [page]);
 
   useEffect(() => {
     if (!toast) return;
@@ -150,9 +169,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#f5faf6] text-slate-900">
-      {/* =====================================================
-          DESKTOP SIDEBAR
-      ===================================================== */}
+
+      {/* DESKTOP SIDEBAR */}
 
       <aside className="fixed left-0 top-0 bottom-0 w-64 bg-emerald-950 text-white p-5 hidden md:flex flex-col z-30">
         <div className="flex items-center gap-3">
@@ -230,18 +248,15 @@ function App() {
           </button>
 
           <p className="text-[10px] text-emerald-500 text-center mt-5">
-           
-              PlantCare AI © 2026 Kritika Bunkar
-            
+            PlantCare AI © 2026 Kritika Bunkar
           </p>
         </div>
       </aside>
 
-      {/* =====================================================
-          MAIN
-      ===================================================== */}
+      {/* MAIN */}
 
       <main className="md:ml-64 p-3 sm:p-5 lg:p-8 pb-24 md:pb-8 max-w-[1600px]">
+
         {/* HEADER */}
 
         <header className="flex justify-between items-center mb-5 sm:mb-7">
@@ -259,6 +274,7 @@ function App() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+
             <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-emerald-100 text-xs font-semibold text-slate-500">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               AI System Ready
@@ -266,12 +282,15 @@ function App() {
 
             {installPrompt && (
               <button
-                onClick={installApp}
-                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-700 text-white text-xs font-black hover:bg-emerald-800 transition shadow-sm"
+                type="button"
+                onClick={() => setShowInstallPopup(true)}
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-emerald-700 text-white text-[10px] sm:text-xs font-black hover:bg-emerald-800 active:scale-95 transition shadow-sm"
                 title="Install PlantCare AI"
               >
                 <Download size={14} />
-                Install App
+                <span className="hidden sm:inline">
+                  Install App
+                </span>
               </button>
             )}
 
@@ -331,15 +350,13 @@ function App() {
           </div>
         )}
 
-                
-          <Footer
-  onAbout={() => setPage("project-info")}
-/>
-
+        <Footer
+          onAbout={() => setPage("project-info")}
+        />
 
       </main>
 
-      {/* MOBILE BOTTOM NAV*/}
+      {/* MOBILE BOTTOM NAV */}
 
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-emerald-100 p-2 z-50 shadow-[0_-8px_30px_rgba(15,23,42,0.08)]">
         <div className="flex items-center justify-around max-w-lg mx-auto">
@@ -380,6 +397,74 @@ function App() {
           </button>
         </div>
       </div>
+
+      {/* INSTALL APP POPUP */}
+
+      {showInstallPopup && installPrompt && (
+        <div className="fixed inset-0 z-[100] bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-white rounded-[1.5rem] shadow-2xl border border-emerald-100 overflow-hidden">
+
+            <div className="p-5 sm:p-6">
+              <div className="flex items-start justify-between gap-4">
+
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 grid place-items-center">
+                    <Smartphone size={23} />
+                  </div>
+
+                  <div>
+                    <h3 className="font-black text-lg text-slate-900">
+                      Install PlantCare AI
+                    </h3>
+
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Use PlantCare AI like an app
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={closeInstallPopup}
+                  className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 grid place-items-center"
+                  aria-label="Close"
+                >
+                  <X size={16} />
+                </button>
+
+              </div>
+
+              <div className="mt-5 rounded-xl bg-emerald-50 border border-emerald-100 p-3.5">
+                <p className="text-sm text-emerald-900 leading-6">
+                  Install PlantCare AI on your device for quick access,
+                  a dedicated app-like experience, and easier launching.
+                </p>
+              </div>
+
+              <div className="flex gap-2.5 mt-5">
+
+                <button
+                  type="button"
+                  onClick={closeInstallPopup}
+                  className="flex-1 py-3 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-bold hover:bg-slate-50 transition"
+                >
+                  Not Now
+                </button>
+
+                <button
+                  type="button"
+                  onClick={installApp}
+                  className="flex-1 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-black transition shadow-sm"
+                >
+                  Install App
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
