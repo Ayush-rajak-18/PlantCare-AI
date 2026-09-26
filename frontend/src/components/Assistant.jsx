@@ -755,7 +755,8 @@ function Assistant({ user, setToast }) {
 
   return (
     <div className="max-w-6xl">
-      {/*chat */}
+      {/*          CHAT APP
+      ================================================= */}
 
       <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-emerald-100 shadow-sm overflow-hidden relative h-[calc(100vh-190px)] min-h-[570px] max-h-[850px] flex flex-col">
         {/* HEADER */}

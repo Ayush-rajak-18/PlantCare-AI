@@ -1,0 +1,13 @@
+{
+  "name": "PlantCare AI",
+  "short_name": "PlantCare AI",
+  "description": "AI-powered plant disease detection and personalized plant care.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5faf6",
+  "theme_color": "#064e3b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
