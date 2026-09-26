@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as Icons from "../icons";
 import { api } from "../api";
 import { InitialAvatar, SectionLabel, LoadingDots, MiniFeature, TopicChip, Stat, PlantCard, DiagnosisResult, AIResponse, formatInlineText } from "./Helpers";
-const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu } = Icons;
+const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu, FileText, Download } = Icons;
 
 function Doctor({
   setToast,
@@ -11,7 +11,28 @@ function Doctor({
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [result, setResult] = useState(null);
+  const diagnosisStorageKey =
+    "plantcare_last_diagnosis_" +
+    (localStorage.getItem("plantcare_email") ||
+      localStorage.getItem("plantcare_name") ||
+      "user").toLowerCase().replace(/[^a-z0-9]/g, "_");
+
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(diagnosisStorageKey);
+      if (saved) setResult(JSON.parse(saved));
+    } catch {}
+  }, [diagnosisStorageKey]);
+
+  useEffect(() => {
+    try {
+      if (result) {
+        localStorage.setItem(diagnosisStorageKey, JSON.stringify(result));
+      }
+    } catch {}
+  }, [result, diagnosisStorageKey]);
 
   function handleFileChange(e) {
     const selected = e.target.files?.[0];
@@ -39,6 +60,21 @@ function Doctor({
     setFile(null);
     setPreview("");
     setResult(null);
+    try {
+      localStorage.removeItem(diagnosisStorageKey);
+    } catch {}
+  }
+
+  function generateReport() {
+    if (!result) return;
+    const confidence = Math.max(0, Math.min(100, Number(result.confidence || 0) * 100));
+    const recommendations = Array.isArray(result.recommendations) ? result.recommendations : [];
+    const date = new Date().toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>\"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const popup = window.open("", "_blank", "width=900,height=900");
+    if (!popup) { setToast("Please allow pop-ups to generate the report."); return; }
+    popup.document.write(`<!doctype html><html><head><title>PlantCare AI Health Report</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:Arial,sans-serif;color:#0f172a;margin:0;background:#f5faf6}.page{max-width:760px;margin:30px auto;background:#fff;padding:40px;border-radius:22px}.brand{color:#047857;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:12px}.title{font-size:34px;margin:8px 0}.muted{color:#64748b}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}.card{border:1px solid #d1fae5;border-radius:16px;padding:16px}.label{font-size:11px;color:#64748b;text-transform:uppercase;font-weight:700}.value{font-size:20px;font-weight:800;margin-top:6px}.bar{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:10px}.fill{height:100%;background:#059669;width:${confidence}%;border-radius:99px}.section{margin-top:26px}.section h2{font-size:18px}.item{padding:11px 13px;background:#ecfdf5;border-radius:12px;margin:8px 0}.footer{margin-top:35px;padding-top:18px;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b}@media print{body{background:#fff}.page{margin:0;max-width:none;border-radius:0;box-shadow:none;padding:24px}}@media(max-width:600px){.page{margin:0;border-radius:0;padding:24px}.grid{grid-template-columns:1fr}}</style></head><body><div class="page"><div class="brand">PlantCare AI</div><div class="title">Plant Health Report</div><p class="muted">Generated on ${escapeHtml(date)}</p><div class="grid"><div class="card"><div class="label">Plant</div><div class="value">${escapeHtml(result.plant || "Unknown")}</div></div><div class="card"><div class="label">Diagnosis</div><div class="value">${escapeHtml(result.disease || "Unknown condition")}</div></div></div><div class="card"><div class="label">AI Model Confidence</div><div class="value">${confidence.toFixed(1)}%</div><div class="bar"><div class="fill"></div></div></div><div class="section"><h2>Recommended Care</h2>${recommendations.length ? recommendations.map((x,i)=>`<div class="item"><b>${i+1}.</b> ${escapeHtml(x)}</div>`).join("") : '<p class="muted">No additional recommendations were returned.</p>'}</div><div class="section"><h2>Important Note</h2><p class="muted">This report is an AI-assisted plant health assessment. Use a clear image and consult a qualified local agriculture professional for uncertain or severe cases.</p></div><div class="footer">PlantCare AI © 2026 Kritika Bunkar</div></div><script>window.onload=()=>setTimeout(()=>window.print(),300)</script></body></html>`);
+    popup.document.close();
   }
 
   async function diagnose(e) {
@@ -238,7 +274,16 @@ function Doctor({
       </div>
 
       {result && (
-        <DiagnosisResult result={result} />
+        <>
+          <DiagnosisResult result={result} />
+          <div className="mt-4 flex flex-col sm:flex-row gap-3">
+            <button type="button" onClick={generateReport} className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-slate-950 text-white font-black text-sm hover:bg-slate-800 transition shadow-lg">
+              <FileText size={17} />
+              Generate Health Report
+            </button>
+            <p className="text-[11px] text-slate-400 self-center">Opens a print-ready report. Choose <b>Save as PDF</b> in the browser print dialog.</p>
+          </div>
+        </>
       )}
     </div>
   );

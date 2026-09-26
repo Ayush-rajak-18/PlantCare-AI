@@ -2,9 +2,163 @@ import React, { useEffect, useRef, useState } from "react";
 import * as Icons from "../icons";
 import { api } from "../api";
 import { InitialAvatar, SectionLabel, LoadingDots, MiniFeature, TopicChip, Stat, PlantCard, DiagnosisResult, AIResponse, formatInlineText } from "./Helpers";
-const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu } = Icons;
+const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu, Volume2, VolumeX, Languages, Copy, Check } = Icons;
 
-function Assistant({ user }) {
+
+
+function renderInlineText(text, keyPrefix = "inline") {
+  const parts = String(text || "").split(/(\*\*[^*]+\*\*|`[^`]+`|https?:\/\/\S+)/g);
+  return parts.map((part, index) => {
+    if (/^\*\*[^*]+\*\*$/.test(part)) {
+      return <strong key={`${keyPrefix}-b-${index}`}>{part.slice(2, -2)}</strong>;
+    }
+    if (/^`[^`]+`$/.test(part)) {
+      return <code key={`${keyPrefix}-c-${index}`} className="px-1.5 py-0.5 rounded-md bg-slate-100 text-emerald-700 text-[0.9em] font-semibold">{part.slice(1, -1)}</code>;
+    }
+    if (/^https?:\/\//.test(part)) {
+      return <span key={`${keyPrefix}-u-${index}`} className="break-all">{part}</span>;
+    }
+    return <React.Fragment key={`${keyPrefix}-t-${index}`}>{part}</React.Fragment>;
+  });
+}
+
+function RichAIResponse({ text }) {
+  const raw = String(text || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\u00a0/g, " ")
+    .trim();
+  const lines = raw.split("\n");
+  const blocks = [];
+  let paragraph = [];
+  let list = [];
+  let ordered = [];
+  let table = [];
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    const value = paragraph.join(" ").trim();
+    if (value) blocks.push({ type: "p", value });
+    paragraph = [];
+  };
+  const flushList = () => {
+    if (list.length) blocks.push({ type: "ul", items: list });
+    if (ordered.length) blocks.push({ type: "ol", items: ordered });
+    list = [];
+    ordered = [];
+  };
+  const flushTable = () => {
+    if (table.length) blocks.push({ type: "table", rows: table });
+    table = [];
+  };
+
+  // Accept normal Markdown tables with or without the outer pipes.
+  const isTableRow = (line) => {
+    const t = String(line || "").trim();
+    return t.includes("|") && t.split("|").length >= 3;
+  };
+  const isTableDivider = (line) => {
+    const t = String(line || "").trim().replace(/^\|/, "").replace(/\|$/, "");
+    const cells = t.split("|").map(c => c.trim()).filter(Boolean);
+    return cells.length >= 2 && cells.every(c => /^:?-{2,}:?$/.test(c));
+  };
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushParagraph(); flushList(); flushTable();
+      return;
+    }
+
+    if (isTableRow(trimmed)) {
+      flushParagraph(); flushList();
+      if (!isTableDivider(trimmed)) {
+        const cells = trimmed
+          .replace(/^\|/, "")
+          .replace(/\|$/, "")
+          .split("|")
+          .map(c => c.trim());
+        if (cells.length >= 2) table.push(cells);
+      }
+      return;
+    }
+    if (table.length) flushTable();
+
+    const heading = trimmed.match(/^(#{1,3})\s+(.+)$/);
+    if (heading) {
+      flushParagraph(); flushList();
+      blocks.push({ type: "h", level: heading[1].length, value: heading[2] });
+      return;
+    }
+
+    const bullet = trimmed.match(/^(?:[-*•]|\u2022)\s+(.+)$/);
+    if (bullet) {
+      flushParagraph();
+      ordered.length && flushList();
+      list.push(bullet[1]);
+      return;
+    }
+
+    const number = trimmed.match(/^\d+[.)]\s+(.+)$/);
+    if (number) {
+      flushParagraph();
+      list.length && flushList();
+      ordered.push(number[1]);
+      return;
+    }
+
+    flushList();
+    paragraph.push(trimmed);
+  });
+
+  flushParagraph(); flushList(); flushTable();
+
+  return (
+    <div className="space-y-3 text-[13px] sm:text-[14px] leading-6 text-slate-700">
+      {blocks.map((block, index) => {
+        if (block.type === "h") {
+          return (
+            <div key={index} className={`${block.level === 1 ? "text-base sm:text-lg" : "text-sm sm:text-[15px]"} font-black text-slate-900 pt-1`}>
+              {renderInlineText(block.value, `h-${index}`)}
+            </div>
+          );
+        }
+        if (block.type === "ul" || block.type === "ol") {
+          const Tag = block.type === "ul" ? "ul" : "ol";
+          return (
+            <Tag key={index} className={`${block.type === "ul" ? "list-disc" : "list-decimal"} pl-5 space-y-1.5 marker:text-emerald-600`}>
+              {block.items.map((item, i) => <li key={i} className="pl-1">{renderInlineText(item, `l-${index}-${i}`)}</li>)}
+            </Tag>
+          );
+        }
+        if (block.type === "table") {
+          const rows = block.rows;
+          if (!rows.length) return null;
+          return (
+            <div key={index} className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+              <table className="w-full min-w-[520px] border-collapse text-left">
+                <thead>
+                  <tr className="bg-emerald-50 border-b border-emerald-100">
+                    {rows[0].map((cell, i) => <th key={i} className="px-3.5 py-2.5 text-[11px] sm:text-xs font-black text-emerald-800 whitespace-nowrap">{renderInlineText(cell, `th-${index}-${i}`)}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.slice(1).map((row, r) => (
+                    <tr key={r} className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50/70">
+                      {rows[0].map((_, c) => <td key={c} className="px-3.5 py-2.5 text-[11px] sm:text-xs text-slate-600 align-top">{renderInlineText(row[c] || "—", `td-${index}-${r}-${c}`)}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        }
+        return <p key={index} className="whitespace-normal">{renderInlineText(block.value, `p-${index}`)}</p>;
+      })}
+    </div>
+  );
+}
+
+function Assistant({ user, setToast }) {
   const historyKey =
     "plantcare_chat_history_" +
     (
@@ -34,8 +188,16 @@ function Assistant({ user }) {
       }
     });
 
+  const currentChatKey = historyKey + "_current_chat";
+
   const [currentChatId, setCurrentChatId] =
-    useState(null);
+    useState(() => {
+      try {
+        return localStorage.getItem(currentChatKey);
+      } catch {
+        return null;
+      }
+    });
 
   const [showHistory, setShowHistory] =
     useState(false);
@@ -43,27 +205,37 @@ function Assistant({ user }) {
   const [searchHistory, setSearchHistory] =
     useState("");
 
+  const [language, setLanguage] = useState(() => {
+    try { return localStorage.getItem(historyKey + "_language") || "English"; } catch { return "English"; }
+  });
+  const [speakingId, setSpeakingId] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
+
+  // Stop any speech when leaving the Assistant page or refreshing the app.
+  useEffect(() => {
+    return () => {
+      try { window.speechSynthesis?.cancel?.(); } catch {}
+    };
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (currentChatId) {
+        localStorage.setItem(currentChatKey, currentChatId);
+      } else {
+        localStorage.removeItem(currentChatKey);
+      }
+    } catch {}
+  }, [currentChatId, currentChatKey]);
+
   const chatEndRef = useRef(null);
 
   const quickQuestions = [
-    {
-      icon: "🍃",
-      text: "Why are my graps leaves turning yellow?",
-    },
-    {
-      icon: "💧",
-      text: "How often should I water my cherry?",
-    },
-    {
-      icon: "🦠",
-      text: "What causes powdery mildew?",
-    },
-    {
-      icon: "☀️",
-      text: "How much sunlight does a tomato plant need?",
-    },
+    { icon: "🍃", text: "Why are my plant leaves turning yellow?" },
+    { icon: "💧", text: "How often should I water my plant?" },
+    { icon: "🦠", text: "What causes powdery mildew?" },
+    { icon: "☀️", text: "How much sunlight does a plant need?" },
   ];
-
   function saveConversations(updated) {
     setConversations(updated);
 
@@ -154,6 +326,162 @@ function Assistant({ user }) {
     setShowHistory(false);
   }
 
+  function persistLanguage(next) {
+    setLanguage(next);
+    try { localStorage.setItem(historyKey + "_language", next); } catch {}
+  }
+
+  function cleanForSpeech(text) {
+    let value = String(text || "");
+
+    // Remove fenced code blocks, URLs and markdown links.
+    value = value
+      .replace(/```[\s\S]*?```/g, "")
+      .replace(/https?:\/\/\S+/g, "")
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
+
+    // Convert markdown tables into natural speech instead of reading |, ---, etc.
+    // Example: | Plant | Sunlight | Tip |  ->  "Plant. Sunlight. Tip."
+    value = value
+      .split("\n")
+      .map((line) => {
+        const t = line.trim();
+        if (!t) return "";
+        if (/^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)+\|?$/.test(t)) return "";
+        if (t.includes("|") && (t.startsWith("|") || t.endsWith("|"))) {
+          return t
+            .replace(/^\s*\|/, "")
+            .replace(/\|\s*$/, "")
+            .split("|")
+            .map((cell) => cell.trim())
+            .filter(Boolean)
+            .join(". ");
+        }
+        return line;
+      })
+      .join("\n");
+
+    return value
+      .replace(/^\s*#{1,6}\s+/gm, "")
+      .replace(/[*_`~]/g, "")
+      .replace(/^\s*>\s?/gm, "")
+      .replace(/^\s*[-*•●▪]\s+/gm, "")
+      .replace(/^\s*\d+[.)]\s+/gm, "")
+      // Never speak Markdown table separators or pipe characters.
+      .replace(/^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)+\|?\s*$/gm, "")
+      .replace(/\|/g, ". ")
+      .replace(/[-]{3,}/g, "")
+      .replace(/\n+/g, ". ")
+      .replace(/\.{2,}/g, ". ")
+      .replace(/\s{2,}/g, " ")
+      .replace(/\s+([,.!?])/g, "$1")
+      .trim();
+  }
+
+  function chooseAssistantVoice(targetLang) {
+    const voices = window.speechSynthesis?.getVoices?.() || [];
+    if (!voices.length) return null;
+
+    const langCode = targetLang === "Hindi" ? "hi" : "en";
+    const matching = voices.filter((voice) =>
+      String(voice.lang || "").toLowerCase().startsWith(langCode)
+    );
+
+    // Prefer natural/neural/Google/Microsoft voices when the device exposes them.
+    const preferred = ["neural", "natural", "google", "microsoft", "online"];
+    for (const keyword of preferred) {
+      const found = matching.find((voice) =>
+        `${voice.name} ${voice.voiceURI}`.toLowerCase().includes(keyword)
+      );
+      if (found) return found;
+    }
+
+    // Prefer a male/low-register sounding voice when the browser exposes one.
+    const male = matching.find((voice) =>
+      /male|david|mark|daniel|guy|ravi|hemant|madhur/i.test(voice.name)
+    );
+    return male || matching[0] || voices.find((voice) => voice.default) || voices[0];
+  }
+
+  function speakAnswer(id, text) {
+    if (!("speechSynthesis" in window)) {
+      setToast?.("Voice playback is not supported in this browser.");
+      return;
+    }
+
+    if (speakingId === id) {
+      window.speechSynthesis.cancel();
+      setSpeakingId(null);
+      return;
+    }
+
+    const spokenText = cleanForSpeech(text);
+    if (!spokenText) return;
+
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(spokenText);
+    utterance.lang = language === "Hindi" ? "hi-IN" : "en-IN";
+    utterance.rate = language === "Hindi" ? 0.88 : 0.86;
+    utterance.pitch = 0.72;
+    utterance.volume = 1;
+
+    const voice = chooseAssistantVoice(language);
+    if (voice) {
+      utterance.voice = voice;
+      utterance.lang = voice.lang || utterance.lang;
+    }
+
+    utterance.onstart = () => setSpeakingId(id);
+    utterance.onend = () => setSpeakingId(null);
+    utterance.onerror = () => setSpeakingId(null);
+
+    setSpeakingId(id);
+    window.speechSynthesis.speak(utterance);
+  }
+
+  async function copyAnswer(id, text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 1500);
+    } catch {
+      setToast?.("Copy is not available in this browser.");
+    }
+  }
+
+  function regenerateLast() {
+    const chat = conversations.find((c) => c.id === currentChatId);
+    const lastUser = [...(chat?.messages || [])].reverse().find((m) => m.role === "user");
+    if (lastUser) ask(null, lastUser.text);
+  }
+
+  function getSmartLocalReply(question) {
+    const text = String(question || "").trim().toLowerCase();
+    if (!text) return null;
+
+    const greeting = /^(hi|hii|hello|hey|hey there|namaste|namaskar|good morning|good afternoon|good evening|how are you|how r you)[.!?\s]*$/i.test(text);
+    if (greeting) {
+      const replies = {
+        English: "Hello! 🌿 I’m PlantCare AI. Tell me your plant name, symptoms, or upload a leaf photo and I’ll help you with care, treatment, and prevention.",
+        Hindi: "नमस्ते! 🌿 मैं PlantCare AI हूँ। अपने पौधे का नाम, लक्षण बताइए या पत्ते की फोटो भेजिए। मैं care, treatment और prevention में मदद करूँगा।",
+        Hinglish: "Hello! 🌿 Main PlantCare AI hoon. Plant ka naam, symptoms batao ya leaf photo upload karo. Main care, treatment aur prevention mein help karunga."
+      };
+      return replies[language] || replies.English;
+    }
+
+    // Ignore accidental one/two-character input instead of sending it to RAG.
+    if (text.length < 3 || (/^[a-z]{1,2}$/i.test(text) && !/[aeiou]/i.test(text))) {
+      const replies = {
+        English: "I didn’t quite understand that. Please tell me the plant name and what you’re noticing.",
+        Hindi: "मैं इसे ठीक से समझ नहीं पाया। पौधे का नाम और आपको क्या समस्या दिख रही है, बताइए।",
+        Hinglish: "Mujhe ye clear nahi hua. Plant ka naam aur kya problem dikh rahi hai, batao."
+      };
+      return replies[language] || replies.English;
+    }
+    return null;
+  }
+
   async function ask(
     e,
     customQuestion = null
@@ -165,6 +493,30 @@ function Assistant({ user }) {
     ).trim();
 
     if (!question || loading) return;
+
+    const localReply = getSmartLocalReply(question);
+    if (localReply) {
+      const id = currentChatId || Date.now().toString() + Math.random().toString(36).slice(2);
+      const existing = conversations.find((chat) => chat.id === id);
+      const chat = existing || {
+        id,
+        title: question.length > 55 ? question.slice(0, 55) + "..." : question,
+        createdAt: new Date().toISOString(),
+        messages: [],
+      };
+      const updatedChat = {
+        ...chat,
+        messages: [
+          ...chat.messages,
+          { id: Date.now().toString() + "u", role: "user", text: question, createdAt: new Date().toISOString() },
+          { id: Date.now().toString() + "a", role: "ai", text: localReply, sources: [], createdAt: new Date().toISOString() },
+        ],
+      };
+      saveConversations(existing ? conversations.map((c) => c.id === id ? updatedChat : c) : [updatedChat, ...conversations]);
+      setCurrentChatId(id);
+      setQ("");
+      return;
+    }
 
     let chatId = currentChatId;
 
@@ -261,13 +613,32 @@ function Assistant({ user }) {
     setLoading(true);
 
     try {
+      const languageInstruction = language === "English"
+        ? "Answer in clear English."
+        : language === "Hindi"
+        ? "Answer in natural Hindi. Keep plant disease names in English when that is clearer."
+        : "Answer in natural Hinglish (Hindi written in Roman script). Keep scientific plant disease names in English.";
+
+      const recentMessages = (baseChat.messages || [])
+        .slice(-6)
+        .map((m) => `${m.role === "user" ? "User" : "PlantCare AI"}: ${m.text}`)
+        .join("\n");
+
+      const contextInstruction = recentMessages
+        ? `\n\nConversation context (use only when relevant; do not repeat it unnecessarily):\n${recentMessages}`
+        : "";
+
+      const assistantRules = `\n\nResponse rules: Answer the current question directly. Use the conversation context only when it helps resolve references such as “this plant” or “it”. Do not echo the user's question. Do not invent a diagnosis. If evidence is insufficient, say what is uncertain and ask at most one useful follow-up question. Give practical steps in priority order. Keep normal answers concise (about 5-10 short lines). Use simple headings and bullets when helpful. Markdown tables are allowed for comparison, but never output raw pipe characters outside a table.`;
+
+      const requestQuestion = `${languageInstruction}${assistantRules}${contextInstruction}\n\nCURRENT QUESTION: ${question}`;
+
       const r = await api("/rag/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          question,
+          question: requestQuestion,
         }),
       });
 
@@ -384,14 +755,12 @@ function Assistant({ user }) {
 
   return (
     <div className="max-w-6xl">
-      {/* =================================================
-          CHAT APP
-      ================================================= */}
+      {/*chat */}
 
       <div className="bg-white rounded-[1.5rem] sm:rounded-[2rem] border border-emerald-100 shadow-sm overflow-hidden relative h-[calc(100vh-190px)] min-h-[570px] max-h-[850px] flex flex-col">
         {/* HEADER */}
 
-        <div className="px-3 sm:px-5 py-3.5 sm:py-4 border-b bg-gradient-to-r from-white via-white to-emerald-50 shrink-0">
+        <div className="px-3 sm:px-5 py-3 sm:py-4 border-b border-slate-100 bg-white/95 backdrop-blur-md shrink-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-emerald-100 text-emerald-700 grid place-items-center shrink-0">
@@ -422,12 +791,20 @@ function Assistant({ user }) {
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <div className="flex items-center gap-1 px-1.5 sm:px-2.5 py-1.5 rounded-xl sm:rounded-full bg-emerald-50/80 border border-emerald-100 shadow-sm shrink-0">
+                <Languages size={14} className="text-emerald-700 shrink-0" />
+                <select value={language} onChange={(e) => persistLanguage(e.target.value)} className="appearance-none bg-transparent text-[10px] sm:text-[11px] font-black text-emerald-800 outline-none w-[68px] sm:w-[82px] cursor-pointer" aria-label="AI language">
+                  <option>English</option>
+                  <option>Hindi</option>
+                  <option>Hinglish</option>
+                </select>
+              </div>
               <button
                 type="button"
                 onClick={() =>
                   setShowHistory(true)
                 }
-                className="w-9 h-9 sm:w-auto sm:h-auto sm:flex items-center gap-2 px-2.5 sm:px-3 py-2 rounded-xl border border-emerald-100 bg-white text-emerald-700 hover:bg-emerald-50 font-bold text-xs sm:text-sm transition"
+                className="w-9 h-9 sm:w-auto sm:h-auto flex items-center justify-center sm:justify-start gap-2 px-2.5 sm:px-3 py-2 rounded-xl border border-emerald-100 bg-white text-emerald-700 hover:bg-emerald-50 font-bold text-xs sm:text-sm transition"
                 title="Chat history"
               >
                 <History size={16} />
@@ -446,7 +823,7 @@ function Assistant({ user }) {
               <button
                 type="button"
                 onClick={createNewChat}
-                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm transition shadow-sm"
+                className="flex items-center justify-center gap-1.5 w-9 h-9 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm transition shadow-sm"
               >
                 <Plus size={16} />
 
@@ -458,9 +835,7 @@ function Assistant({ user }) {
           </div>
         </div>
 
-        {/* =================================================
-            HISTORY DRAWER
-        ================================================= */}
+        {/* HISTORY sectionn*/}
 
         {showHistory && (
           <div className="absolute inset-0 z-50 bg-slate-950/25 backdrop-blur-[2px]">
@@ -611,9 +986,8 @@ function Assistant({ user }) {
           </div>
         )}
 
-        {/* =================================================
-            CHAT AREA
-        ================================================= */}
+        {/*
+            CHAT AREA*/}
 
         <div
           id="plantcare-chat-area"
@@ -755,7 +1129,7 @@ function Assistant({ user }) {
                             {m.text}
                           </div>
                         ) : (
-                          <AIResponse
+                          <RichAIResponse
                             text={m.text}
                           />
                         )}
@@ -817,6 +1191,24 @@ function Assistant({ user }) {
                             </div>
                           </details>
                         )}
+
+                        {!m.error && (
+                          <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-200/70">
+                            <button onClick={() => copyAnswer(m.id, m.text)} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-[10px] font-bold text-slate-600 hover:bg-slate-50 transition">
+                              {copiedId === m.id ? <Check size={12} /> : <Copy size={12} />}
+                              {copiedId === m.id ? "Copied" : "Copy"}
+                            </button>
+                            <button onClick={() => speakAnswer(m.id, m.text)} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-[10px] font-bold text-slate-600 hover:bg-slate-50 transition">
+                              {speakingId === m.id ? <VolumeX size={12} /> : <Volume2 size={12} />}
+                              {speakingId === m.id ? "Stop" : "Listen"}
+                            </button>
+                            {i === messages.length - 1 && (
+                              <button onClick={regenerateLast} disabled={loading} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-[10px] font-bold text-slate-600 hover:bg-slate-50 transition disabled:opacity-40">
+                                <RefreshCw size={12} /> Regenerate
+                              </button>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -863,16 +1255,14 @@ function Assistant({ user }) {
           )}
         </div>
 
-        {/* =================================================
-            INPUT
-        ================================================= */}
+        {/*  INPUT */}
 
         <form
           onSubmit={ask}
           className="p-2.5 sm:p-4 border-t bg-white shrink-0"
         >
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-end gap-2 p-1.5 sm:p-2 rounded-2xl border border-slate-200 bg-slate-50 focus-within:bg-white focus-within:border-emerald-300 focus-within:ring-4 focus-within:ring-emerald-50 transition">
+            <div className="flex items-end gap-2 p-1.5 sm:p-2 rounded-[1.35rem] border border-slate-200 bg-slate-50/95 focus-within:bg-white focus-within:border-emerald-300 focus-within:ring-4 focus-within:ring-emerald-50 transition shadow-sm">
               <input
                 className="flex-1 min-w-0 px-2.5 sm:px-3 py-2.5 bg-transparent outline-none text-sm sm:text-base text-slate-800 placeholder:text-slate-400"
                 value={q}

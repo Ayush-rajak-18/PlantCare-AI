@@ -9,7 +9,7 @@ import Doctor from "./Doctor";
 import Assistant from "./Assistant";
 import Footer from "./Footer";
 import ProjectInfo from "./ProjectInfo";
-const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu } = Icons;
+const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu, Smartphone, Download } = Icons;
 
 function App() {
   const storedName = localStorage.getItem("plantcare_name");
@@ -24,10 +24,56 @@ function App() {
       : null
   );
 
-  const [page, setPage] = useState("dashboard");
+  const getInitialPage = () => {
+    const saved = localStorage.getItem("plantcare_current_page");
+    const valid = ["dashboard", "plants", "doctor", "assistant", "project-info"];
+    return valid.includes(saved) ? saved : "dashboard";
+  };
+
+  const [page, setPageState] = useState(getInitialPage);
+  const setPage = (nextPage) => {
+    setPageState(nextPage);
+    try {
+      localStorage.setItem("plantcare_current_page", nextPage);
+    } catch {}
+  };
   const [plants, setPlants] = useState([]);
   const [toast, setToast] = useState("");
-  const [diagnosisCount, setDiagnosisCount] = useState(0);
+  const [installPrompt, setInstallPrompt] = useState(null);
+
+  useEffect(() => {
+    const handler = (event) => {
+      event.preventDefault();
+      setInstallPrompt(event);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  async function installApp() {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice.catch(() => null);
+    setInstallPrompt(null);
+  }
+  const diagnosisKey =
+    "plantcare_diagnosis_count_" +
+    (storedEmail || storedName || "user").toLowerCase().replace(/[^a-z0-9]/g, "_");
+
+  const [diagnosisCount, setDiagnosisCount] = useState(() => {
+    const saved = localStorage.getItem(diagnosisKey);
+    return saved ? Number(saved) || 0 : 0;
+  });
+
+  function incrementDiagnosisCount() {
+    setDiagnosisCount((count) => {
+      const next = count + 1;
+      try {
+        localStorage.setItem(diagnosisKey, String(next));
+      } catch {}
+      return next;
+    });
+  }
 
   async function loadPlants() {
     try {
@@ -72,6 +118,8 @@ function App() {
 
     setUser(null);
     setPlants([]);
+    localStorage.removeItem("plantcare_current_page");
+    localStorage.removeItem(diagnosisKey);
     setDiagnosisCount(0);
   };
 
@@ -216,6 +264,17 @@ function App() {
               AI System Ready
             </div>
 
+            {installPrompt && (
+              <button
+                onClick={installApp}
+                className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-700 text-white text-xs font-black hover:bg-emerald-800 transition shadow-sm"
+                title="Install PlantCare AI"
+              >
+                <Download size={14} />
+                Install App
+              </button>
+            )}
+
             <InitialAvatar
               name={user.name}
               large
@@ -244,16 +303,12 @@ function App() {
         {page === "doctor" && (
           <Doctor
             setToast={setToast}
-            onDiagnosis={() =>
-              setDiagnosisCount(
-                (count) => count + 1
-              )
-            }
+            onDiagnosis={incrementDiagnosisCount}
           />
         )}
 
         {page === "assistant" && (
-          <Assistant user={user} />
+          <Assistant user={user} setToast={setToast} />
         )}
 
         {page === "project-info" && (
@@ -284,9 +339,7 @@ function App() {
 
       </main>
 
-      {/* =====================================================
-          MOBILE BOTTOM NAV
-      ===================================================== */}
+      {/* MOBILE BOTTOM NAV*/}
 
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-emerald-100 p-2 z-50 shadow-[0_-8px_30px_rgba(15,23,42,0.08)]">
         <div className="flex items-center justify-around max-w-lg mx-auto">
@@ -331,8 +384,6 @@ function App() {
   );
 }
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
+/* DASHBOARD*/
 
 export default App;
