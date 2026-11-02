@@ -1,12 +1,25 @@
 import React from "react";
+import { assetUrl } from "../api";
 import { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu } from "../icons";
 
-function InitialAvatar({ name, large = false }) {
+function InitialAvatar({ name, src, large = false }) {
+  const size = large ? "w-12 h-12 text-base" : "w-9 h-9 text-sm";
+
+  // profile photo ho to wo dikhao
+  if (src) {
+    return (
+      <img
+        src={assetUrl(src)}
+        alt={name || "Profile"}
+        className={`${size} rounded-full object-cover shrink-0 ring-2 ring-white/80 shadow-sm`}
+      />
+    );
+  }
+
+  // warna naam ka pehla akshar
   return (
     <div
-      className={`${
-        large ? "w-12 h-12 text-base" : "w-9 h-9 text-sm"
-      } rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white grid place-items-center font-black shadow-sm shrink-0`}
+      className={`${size} rounded-full bg-gradient-to-br from-forest-500 to-forest-800 text-white grid place-items-center font-black shadow-sm shrink-0 ring-2 ring-white/80`}
     >
       {name?.[0]?.toUpperCase() || "U"}
     </div>

@@ -1,3 +1,4 @@
+# MongoDB connection + collections
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -9,3 +10,4 @@ db = client[os.getenv("DB_NAME", "plantcare_ai")]
 users = db["users"]
 plants = db["plants"]
 diagnoses = db["diagnoses"]
+reminders = db["reminders"]   # NEW: custom reminders

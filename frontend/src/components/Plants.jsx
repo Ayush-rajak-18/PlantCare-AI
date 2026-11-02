@@ -1,69 +1,60 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import * as Icons from "../icons";
-import { api } from "../api";
-import { InitialAvatar, SectionLabel, LoadingDots, MiniFeature, TopicChip, Stat, PlantCard, DiagnosisResult, AIResponse, formatInlineText } from "./Helpers";
-const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu } = Icons;
+import { api, assetUrl } from "../api";
+import PlantForm from "./PlantForm";
 
-function Plants({
-  plants,
-  reload,
-  setToast,
-}) {
-  const [form, setForm] = useState({
-    name: "",
-    species: "",
-    location: "Indoor",
-    watering_days: 3,
-    notes: "",
-  });
+const { Leaf, Plus, Droplets, Sprout, Trash2, Pencil, Search, MapPin, RefreshCw, Check } = Icons;
 
-  const [loading, setLoading] = useState(false);
+/* ---------------------------------------------------------
+   Plants page
 
-  async function add(e) {
-    e.preventDefault();
-    setLoading(true);
+   - Search + filter (All / Indoor / Outdoor / Balcony)
+   - Har plant card: photo, watering status, "Water now", Edit, Delete
+   - Add / Edit ka form alag file mein hai: PlantForm.jsx
 
+   Props: plants, reload (plants dobara laao), setToast
+--------------------------------------------------------- */
+
+const FILTERS = ["All", "Indoor", "Outdoor", "Balcony"];
+
+// watering status ke rang (full class names taaki Tailwind unhe pehchane)
+const STATUS = {
+  overdue: { cls: "bg-coral-500 text-white", text: (p) => (p.days_overdue > 0 ? `Overdue by ${p.days_overdue}d` : "Needs water now") },
+  today: { cls: "bg-sun-400 text-forest-950", text: () => "Water today" },
+  ok: { cls: "bg-white/90 text-forest-700", text: (p) => `Water in ${p.days_left} day${p.days_left === 1 ? "" : "s"}` },
+};
+
+function wateredText(iso) {
+  if (!iso) return "Not watered yet";
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  if (days <= 0) return "Watered today";
+  if (days === 1) return "Watered yesterday";
+  return `Watered ${days} days ago`;
+}
+
+function Plants({ plants, reload, setToast }) {
+  const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
+  const [formPlant, setFormPlant] = useState(undefined); // undefined = band, null = naya, object = edit
+  const [busyId, setBusyId] = useState("");
+
+  async function water(plant) {
+    setBusyId(plant._id);
     try {
-      await api("/plants", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...form,
-          watering_days: Number(
-            form.watering_days
-          ),
-        }),
-      });
-
-      setForm({
-        name: "",
-        species: "",
-        location: "Indoor",
-        watering_days: 3,
-        notes: "",
-      });
-
+      await api(`/plants/${plant._id}/water`, { method: "POST" });
       await reload();
-      setToast("Plant added successfully.");
+      setToast(`${plant.name} watered. Next watering in ${plant.watering_days} days.`);
     } catch (e) {
       setToast(e.message);
     } finally {
-      setLoading(false);
+      setBusyId("");
     }
   }
 
-  async function remove(id) {
-    if (!confirm("Delete this plant?")) {
-      return;
-    }
-
+  async function remove(plant) {
+    if (!confirm(`Delete "${plant.name}"?`)) return;
     try {
-      await api("/plants/" + id, {
-        method: "DELETE",
-      });
-
+      await api("/plants/" + plant._id, { method: "DELETE" });
       await reload();
       setToast("Plant deleted.");
     } catch (e) {
@@ -71,217 +62,154 @@ function Plants({
     }
   }
 
+  const q = search.trim().toLowerCase();
+  const visible = plants.filter((p) => {
+    const matchesFilter = filter === "All" || p.location === filter;
+    const matchesSearch = !q || `${p.name} ${p.species}`.toLowerCase().includes(q);
+    return matchesFilter && matchesSearch;
+  });
+
   return (
-    <div className="grid xl:grid-cols-[380px_1fr] gap-5 sm:gap-6">
-      {/* ADD */}
-
-      <form
-        onSubmit={add}
-        className="bg-white rounded-[2rem] p-5 sm:p-6 border border-emerald-100 shadow-sm h-fit"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-700 grid place-items-center">
-            <Plus />
-          </div>
-
-          <div>
-            <h2 className="text-xl sm:text-2xl font-black">
-              Add Plant
-            </h2>
-
-            <p className="text-xs text-slate-500 mt-0.5">
-              Create a care profile
-            </p>
-          </div>
+    <div>
+      {/* header */}
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold">My Plants</h2>
+          <p className="text-sm text-slate-500 mt-1">
+            {plants.length} {plants.length === 1 ? "plant" : "plants"} in your collection
+          </p>
         </div>
-
-        {["name", "species"].map((k) => (
-          <div key={k} className="mt-4">
-            <label className="text-xs font-bold text-slate-600">
-              {k === "name"
-                ? "Plant name"
-                : "Species"}
-            </label>
-
-            <input
-              required
-              className="w-full mt-1.5 p-3.5 rounded-xl border bg-slate-50 outline-none focus:bg-white focus:border-emerald-300 focus:ring-4 focus:ring-emerald-50 transition text-sm"
-              placeholder={
-                k === "name"
-                  ? "e.g. My Tomato"
-                  : "e.g. Tomato"
-              }
-              value={form[k]}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  [k]: e.target.value,
-                })
-              }
-            />
-          </div>
-        ))}
-
-        <div className="mt-4">
-          <label className="text-xs font-bold text-slate-600">
-            Location
-          </label>
-
-          <select
-            className="w-full mt-1.5 p-3.5 rounded-xl border bg-slate-50 outline-none focus:bg-white focus:border-emerald-300 focus:ring-4 focus:ring-emerald-50 transition text-sm"
-            value={form.location}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                location: e.target.value,
-              })
-            }
-          >
-            <option>Indoor</option>
-            <option>Outdoor</option>
-            <option>Balcony</option>
-          </select>
-        </div>
-
-        <div className="mt-4">
-          <label className="text-xs font-bold text-slate-600">
-            Watering interval
-          </label>
-
-          <div className="relative mt-1.5">
-            <input
-              type="number"
-              min="1"
-              max="60"
-              className="w-full p-3.5 pr-20 rounded-xl border bg-slate-50 outline-none focus:bg-white focus:border-emerald-300 focus:ring-4 focus:ring-emerald-50 transition text-sm"
-              value={form.watering_days}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  watering_days: e.target.value,
-                })
-              }
-            />
-
-            <span className="absolute right-4 top-3.5 text-xs text-slate-400">
-              days
-            </span>
-          </div>
-        </div>
-
-        <div className="mt-4">
-          <label className="text-xs font-bold text-slate-600">
-            Notes
-          </label>
-
-          <textarea
-            className="w-full mt-1.5 p-3.5 rounded-xl border bg-slate-50 outline-none focus:bg-white focus:border-emerald-300 focus:ring-4 focus:ring-emerald-50 transition text-sm resize-none"
-            placeholder="Optional notes about your plant"
-            rows="4"
-            value={form.notes}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                notes: e.target.value,
-              })
-            }
-          />
-        </div>
-
         <button
-          disabled={loading}
-          className="w-full mt-4 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-60 text-white p-3.5 rounded-xl font-black transition shadow-lg shadow-emerald-700/10"
+          onClick={() => setFormPlant(null)}
+          className="btn-primary shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-full text-sm"
         >
-          {loading ? (
-            <>
-              <RefreshCw
-                size={16}
-                className="inline mr-2 animate-spin"
-              />
-              Adding...
-            </>
-          ) : (
-            <>
-              <Plus
-                size={17}
-                className="inline mr-1"
-              />
-              Add Plant
-            </>
-          )}
+          <Plus size={16} /> Add plant
         </button>
-      </form>
+      </div>
 
-      {/* LIST */}
-
-      <div className="bg-white rounded-[2rem] p-5 sm:p-7 border border-emerald-100 shadow-sm">
-        <div className="flex justify-between items-start gap-4">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-black">
-              Your Plants
-            </h2>
-
-            <p className="text-slate-500 text-xs sm:text-sm mt-1">
-              Manage all plants connected to your account.
-            </p>
+      {/* search + filters */}
+      {plants.length > 0 && (
+        <div className="mt-5 flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search plants..."
+              className="w-full pl-11 pr-4 py-3 rounded-full bg-white border border-sage-200 text-sm outline-none focus:border-forest-400 focus:ring-4 focus:ring-mint-200/60 transition"
+            />
           </div>
-
-          <div className="hidden sm:flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-black">
-            <Sprout size={14} />
-            {plants.length}{" "}
-            {plants.length === 1
-              ? "plant"
-              : "plants"}
-          </div>
-        </div>
-
-        {plants.length === 0 ? (
-          <div className="py-16 text-center">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-50 grid place-items-center">
-              <Sprout
-                size={30}
-                className="text-emerald-500"
-              />
-            </div>
-
-            <p className="mt-4 font-black text-slate-800">
-              No plants added yet
-            </p>
-
-            <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto leading-relaxed">
-              Add a plant from the form to create your personal
-              plant-care collection.
-            </p>
-          </div>
-        ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-            {plants.map((p) => (
-              <div
-                key={p._id}
-                className="relative"
+          <div className="flex gap-2 overflow-x-auto">
+            {FILTERS.map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`shrink-0 px-4 py-2.5 rounded-full text-xs font-bold transition ${
+                  filter === f ? "bg-forest-800 text-white shadow-soft" : "bg-white border border-sage-200 text-forest-700 hover:bg-sage-50"
+                }`}
               >
-                <PlantCard p={p} />
-
-                <button
-                  onClick={() =>
-                    remove(p._id)
-                  }
-                  className="absolute right-3 top-3 w-8 h-8 text-red-500 bg-white rounded-xl shadow-sm hover:bg-red-50 transition grid place-items-center"
-                  title="Delete plant"
-                >
-                  <Trash2 size={15} />
-                </button>
-              </div>
+                {f}
+              </button>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* cards */}
+      {plants.length === 0 ? (
+        <div className="mt-6 glass rounded-[2rem] py-16 px-6 text-center">
+          <div className="w-16 h-16 mx-auto rounded-full bg-mint-100 grid place-items-center text-forest-600">
+            <Sprout size={30} />
+          </div>
+          <p className="mt-4 font-extrabold">No plants added yet</p>
+          <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+            Add your first plant with a photo and watering schedule. We'll remind you when it's time to water.
+          </p>
+          <button onClick={() => setFormPlant(null)} className="btn-primary mt-5 px-6 py-3 rounded-full text-sm">
+            Add your first plant
+          </button>
+        </div>
+      ) : visible.length === 0 ? (
+        <p className="mt-10 text-center text-sm text-slate-500">No plants match your search.</p>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-5 mt-6">
+          {visible.map((p) => {
+            const status = STATUS[p.water_status] || STATUS.ok;
+            return (
+              <article key={p._id} className="glass rounded-[2rem] overflow-hidden shadow-soft hover:shadow-card hover:-translate-y-0.5 transition flex flex-col">
+                {/* photo */}
+                <div className="relative h-44 bg-gradient-to-br from-mint-100 to-sage-100">
+                  {p.photo ? (
+                    <img src={assetUrl(p.photo)} alt={p.name} loading="lazy" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full grid place-items-center text-forest-300">
+                      <Leaf size={52} />
+                    </div>
+                  )}
+                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 bg-white/90 text-forest-700 text-[10px] font-bold px-2.5 py-1.5 rounded-full">
+                    <MapPin size={11} /> {p.location || "Plant"}
+                  </span>
+                  <span className={`absolute bottom-3 left-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-3 py-1.5 rounded-full shadow-soft ${status.cls}`}>
+                    <Droplets size={12} /> {status.text(p)}
+                  </span>
+                </div>
+
+                {/* details */}
+                <div className="p-4 flex-1 flex flex-col">
+                  <h3 className="font-extrabold text-lg truncate">{p.name}</h3>
+                  <p className="text-sm text-slate-500 truncate">{p.species}</p>
+
+                  <div className="flex flex-wrap gap-2 mt-3 text-[11px] font-semibold text-forest-700">
+                    <span className="bg-white/80 border border-white px-2.5 py-1.5 rounded-full">Every {p.watering_days} days</span>
+                    <span className="bg-white/80 border border-white px-2.5 py-1.5 rounded-full">{wateredText(p.last_watered)}</span>
+                  </div>
+
+                  {p.notes && (
+                    <p className="mt-3 text-xs text-slate-500 bg-white/70 rounded-2xl p-3 leading-relaxed line-clamp-3">{p.notes}</p>
+                  )}
+
+                  {/* actions */}
+                  <div className="mt-auto pt-4 flex items-center gap-2">
+                    <button
+                      onClick={() => water(p)}
+                      disabled={busyId === p._id}
+                      className="btn-primary flex-1 h-11 rounded-full text-xs inline-flex items-center justify-center gap-1.5 disabled:opacity-60"
+                    >
+                      {busyId === p._id ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />}
+                      Water now
+                    </button>
+                    <button
+                      onClick={() => setFormPlant(p)}
+                      aria-label={`Edit ${p.name}`}
+                      className="w-11 h-11 rounded-full bg-white border border-sage-200 text-forest-700 grid place-items-center hover:bg-sage-50"
+                    >
+                      <Pencil size={16} />
+                    </button>
+                    <button
+                      onClick={() => remove(p)}
+                      aria-label={`Delete ${p.name}`}
+                      className="w-11 h-11 rounded-full bg-white border border-sage-200 text-coral-500 grid place-items-center hover:bg-coral-50"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      {formPlant !== undefined && (
+        <PlantForm
+          plant={formPlant}
+          onClose={() => setFormPlant(undefined)}
+          onSaved={reload}
+          setToast={setToast}
+        />
+      )}
     </div>
   );
 }
-
-/* =========================================================
-   PLANT DOCTOR
-========================================================= */
 
 export default Plants;

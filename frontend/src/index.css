@@ -2,7 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #17351f; background: #f4faf5; }
-body { margin: 0; min-width: 320px; }
-* { box-sizing: border-box; }
-button, input { font: inherit; }
+/* =========================================================
+   1. BASE  (poori app ka background, font, scrollbar)
+========================================================= */
+@layer base {
+  :root {
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    color: #14301f;            /* forest-900 */
+    background: #f1f7ec;
+    -webkit-text-size-adjust: 100%;
+  }
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+  html, body, #root { min-height: 100%; }
+
+  /* soft green airy background (reference jaisa) */
+  body {
+    margin: 0;
+    min-width: 320px;
+    background-color: #f1f7ec;
+    background-image:
+      radial-gradient(60rem 40rem at 100% -10%, #cfe8c9 0%, transparent 60%),
+      radial-gradient(50rem 40rem at -10% 100%, #dcefd6 0%, transparent 60%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+  * { box-sizing: border-box; }
+  h1, h2, h3 { font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif; }
+  button, input, textarea, select { font: inherit; }
+  button { touch-action: manipulation; }
+  img, video { max-width: 100%; }
+  :focus-visible { outline: 2px solid #3f8156; outline-offset: 2px; }
+  ::selection { background: #b9d7c0; color: #14301f; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #b5c7ae; border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* =========================================================
+   2. REUSABLE CLASSES  (naye components inhe use karte hain)
+========================================================= */
+@layer components {
+  /* frosted-glass white card */
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+  }
+
+  /* dark-green pill button (Get Started / Scan Now) */
+  .btn-primary {
+    background: #1f432f;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 12px 28px -12px rgba(20, 48, 31, 0.6);
+    transition: transform .15s ease, background .2s ease;
+  }
+  .btn-primary:hover { background: #265338; }
+  .btn-primary:active { transform: scale(0.97); }
+
+  .pb-safe { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.75rem); }
+  .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+}
+
+/* =========================================================
+   3. COLOUR HARMONY
+   Purane pages (Dashboard, Plants, Assistant...) emerald/white
+   classes use karte hain. Ye chhote rules unhe naye forest-green
+   aur glass look ke saath match karate hain. Kuch bhi hatana ho
+   to bas ye section delete kar do, app phir bhi chalegi.
+========================================================= */
+.bg-white, .bg-white\/95, .bg-white\/80 {
+  background-color: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.bg-emerald-700, .bg-emerald-600 { background-color: #265338; }
+.bg-emerald-800, .hover\:bg-emerald-800:hover { background-color: #1f432f; }
+.text-emerald-700, .text-emerald-600 { color: #265338; }
+.bg-slate-950 { background-color: #14301f; }
+.border-emerald-100 { border-color: rgba(38, 83, 56, 0.12); }

@@ -1,21 +1,42 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import * as Icons from "../icons";
 import { api } from "../api";
-import { InitialAvatar, SectionLabel, LoadingDots, MiniFeature, TopicChip, Stat, PlantCard, DiagnosisResult, AIResponse, formatInlineText } from "./Helpers";
-const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu } = Icons;
+import PlantArt from "./PlantArt";
+
+const { Leaf, Stethoscope, Brain, ShieldCheck, ArrowRight, ChevronLeft, CheckCircle2 } = Icons;
+
+/* ---------------------------------------------------------
+   Auth page = Welcome screen + Login/Register form
+
+   Mobile  : pehle "Future Plant Care" welcome screen,
+             "Get Started" dabane par login form khulta hai.
+   Desktop : dono side-by-side dikhte hain.
+--------------------------------------------------------- */
+
+// Chhota sa floating leaf (sirf sajawat ke liye)
+function FloatingLeaf({ className = "", delay = "0s" }) {
+  return (
+    <svg
+      viewBox="0 0 40 60"
+      className={`absolute animate-float text-forest-400/70 ${className}`}
+      style={{ animationDelay: delay }}
+      aria-hidden="true"
+    >
+      <path d="M20 58 C2 40 2 16 20 2 C38 16 38 40 20 58 Z" fill="currentColor" />
+      <path d="M20 58 L20 10" stroke="white" strokeOpacity="0.5" strokeWidth="1.5" />
+    </svg>
+  );
+}
 
 function Auth({ onLogin }) {
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState("login"); // "login" ya "register"
+  const [showForm, setShowForm] = useState(false); // mobile: welcome -> form
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ---- LOGIN / REGISTER API call (logic bilkul pehle jaisa) ----
   async function submit(e) {
     e.preventDefault();
     setError("");
@@ -24,23 +45,16 @@ function Auth({ onLogin }) {
     try {
       const data = await api(`/auth/${mode}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
       localStorage.setItem("plantcare_token", data.token);
       localStorage.setItem("plantcare_name", data.name);
-      localStorage.setItem(
-        "plantcare_email",
-        data.email || form.email
-      );
+      localStorage.setItem("plantcare_email", data.email || form.email);
+      localStorage.setItem("plantcare_avatar", data.avatar || "");
 
-      onLogin({
-        ...data,
-        email: data.email || form.email,
-      });
+      onLogin({ ...data, email: data.email || form.email });
     } catch (e) {
       setError(e.message);
     } finally {
@@ -48,299 +62,199 @@ function Auth({ onLogin }) {
     }
   }
 
+  // input boxes ka common style
+  const inputCls =
+    "w-full mt-1.5 px-4 py-3.5 rounded-full bg-white/80 border border-sage-200 text-forest-900 placeholder:text-slate-400 outline-none focus:border-forest-400 focus:ring-4 focus:ring-mint-200/60 transition text-sm";
+
   return (
-    <div className="min-h-screen bg-[#f5faf6] lg:grid lg:grid-cols-2">
+    <div className="relative min-h-screen min-h-[100dvh] text-forest-900 overflow-hidden lg:grid lg:grid-cols-2">
+
+      {/* soft blobs */}
+      <div className="pointer-events-none absolute -top-28 -right-24 w-[26rem] h-[26rem] rounded-full bg-mint-200/60 blur-3xl animate-blob" />
+      <div className="pointer-events-none absolute bottom-0 -left-28 w-[24rem] h-[24rem] rounded-full bg-forest-200/40 blur-3xl animate-blob" />
 
       {/* =====================================================
-          BRANDING PANEL
+          1) WELCOME SCREEN  ("Future Plant Care")
       ===================================================== */}
+      <section
+        className={`relative flex-col min-h-screen min-h-[100dvh] px-6 pt-safe pb-safe lg:p-14 xl:p-20 lg:justify-center ${
+          showForm ? "hidden lg:flex" : "flex"
+        }`}
+      >
+        <FloatingLeaf className="w-6 top-24 right-10" delay="0s" />
+        <FloatingLeaf className="w-5 top-1/2 left-4" delay="1.5s" />
+        <FloatingLeaf className="w-4 bottom-40 right-8" delay="3s" />
 
-      <div className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-green-800 text-white px-5 py-7 sm:px-8 sm:py-10 lg:p-14 xl:p-20 min-h-[290px] sm:min-h-[330px] lg:min-h-screen flex items-center">
-
-        {/* Background decorations */}
-
-        <div className="absolute -right-20 -top-20 w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full bg-emerald-600/20" />
-
-        <div className="absolute -left-20 -bottom-20 w-60 h-60 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full bg-lime-300/10" />
-
-        <div className="absolute right-5 bottom-5 sm:right-10 sm:bottom-10 lg:right-20 lg:bottom-20 opacity-[0.05]">
-          <Leaf
-            size={180}
-            className="sm:w-[220px] sm:h-[220px] lg:w-[260px] lg:h-[260px]"
-          />
-        </div>
-
-        <div className="relative w-full max-w-2xl mx-auto lg:max-w-xl">
-
-          {/* BRAND */}
-
-          <div className="flex items-center gap-3">
-
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white/10 border border-white/10 grid place-items-center shrink-0">
-              <Leaf size={23} />
-            </div>
-
-            <div className="min-w-0">
-              <div className="font-black text-xl sm:text-2xl">
-                PlantCare AI
-              </div>
-
-              <div className="text-[10px] sm:text-xs text-emerald-300">
-                Intelligent plant health
-              </div>
-            </div>
-
+        {/* heading */}
+        <div className="pt-12 lg:pt-0 animate-fade-up">
+          <div className="flex items-center gap-2 text-forest-600 text-xs font-bold">
+            <span className="w-8 h-8 rounded-full bg-forest-800 text-white grid place-items-center">
+              <Leaf size={16} />
+            </span>
+            PlantCare AI
           </div>
 
-          {/* BADGE */}
-
-          <div className="mt-6 sm:mt-7">
-            <div className="inline-flex items-center gap-2 text-[9px] sm:text-[11px] font-black uppercase tracking-[0.14em] text-emerald-100 bg-white/10 border border-white/10 px-3 py-1.5 rounded-full">
-              <ShieldCheck size={13} />
-              AI + RAG Plant Care System
-            </div>
-          </div>
-
-          {/* HEADING */}
-
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.05] mt-5 sm:mt-6 lg:mt-7">
-            Grow smarter.
+          <h1 className="mt-5 text-5xl sm:text-6xl xl:text-7xl font-extrabold leading-[1.02] tracking-tight">
+            Future
             <br />
-            Care better.
+            Plant <span className="text-forest-500">Care</span>
           </h1>
 
-          {/* DESCRIPTION */}
-
-          <p className="text-emerald-100 text-sm sm:text-base lg:text-lg mt-4 sm:mt-5 lg:mt-6 leading-relaxed max-w-lg">
-            Detect possible plant diseases with AI and get
-            knowledge-powered plant-care guidance using RAG.
+          <p className="mt-4 text-sm sm:text-base text-forest-600 max-w-xs flex items-start gap-2">
+            <Leaf size={14} className="mt-1 shrink-0" />
+            AI plant ID and care guide on the go.
           </p>
-
-          {/* FEATURES */}
-
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 mt-6 sm:mt-7 lg:mt-9 max-w-lg">
-
-            <div className="rounded-2xl bg-white/10 border border-white/10 p-3 sm:p-4 backdrop-blur-sm">
-              <Stethoscope size={19} />
-
-              <p className="font-bold text-sm sm:text-base mt-2.5 sm:mt-3">
-                AI Diagnosis
-              </p>
-
-              <p className="text-[10px] sm:text-xs text-emerald-200 mt-1">
-                Image-based analysis
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-white/10 border border-white/10 p-3 sm:p-4 backdrop-blur-sm">
-              <Brain size={19} />
-
-              <p className="font-bold text-sm sm:text-base mt-2.5 sm:mt-3">
-                RAG Assistant
-              </p>
-
-              <p className="text-[10px] sm:text-xs text-emerald-200 mt-1">
-                Knowledge-based answers
-              </p>
-            </div>
-
-          </div>
-
-          {/* MOBILE INFO */}
-
-          <div className="mt-5 sm:mt-6 lg:hidden flex items-center gap-2 text-[10px] sm:text-xs text-emerald-200">
-            <CheckCircle2 size={14} />
-            Personalized plant-care support
-          </div>
-
-          {/* FOOTER */}
-
-          <p className="text-[10px] sm:text-xs text-emerald-300 mt-5 sm:mt-6 lg:mt-8">
-            PlantCare AI © 2026 Kritika Bunkar
-          </p>
-
         </div>
-      </div>
+
+        {/* plant picture */}
+        <div className="relative flex-1 min-h-[280px] flex items-center justify-center my-3">
+          <PlantArt className="w-[78%] max-w-[380px] h-auto animate-float" />
+        </div>
+
+        {/* feature cards */}
+        <div className="grid grid-cols-2 gap-3 max-w-lg animate-fade-up">
+          <div className="glass rounded-3xl p-3.5 shadow-soft">
+            <Stethoscope size={19} className="text-forest-600" />
+            <p className="font-bold text-sm mt-2">AI Diagnosis</p>
+            <p className="text-[11px] text-slate-500 mt-0.5">Image-based analysis</p>
+          </div>
+          <div className="glass rounded-3xl p-3.5 shadow-soft">
+            <Brain size={19} className="text-forest-600" />
+            <p className="font-bold text-sm mt-2">RAG Assistant</p>
+            <p className="text-[11px] text-slate-500 mt-0.5">Knowledge-based answers</p>
+          </div>
+        </div>
+
+        <div className="mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-forest-600 bg-white/70 border border-white px-3 py-1.5 rounded-full self-start">
+          <ShieldCheck size={13} />
+          AI + RAG Plant Care System
+        </div>
+
+        {/* "Get Started" pill (sirf mobile par) */}
+        <button
+          onClick={() => setShowForm(true)}
+          className="btn-primary lg:hidden mt-6 w-full flex items-center rounded-full p-1.5 pl-7"
+        >
+          <span className="flex-1 text-left text-base">Get Started</span>
+          <span className="w-12 h-12 rounded-full bg-white/15 grid place-items-center">
+            <ArrowRight size={20} />
+          </span>
+        </button>
+
+        <p className="text-[10px] text-forest-400 mt-4 text-center lg:text-left">
+          PlantCare AI © 2026 Kritika Bunkar
+        </p>
+      </section>
 
       {/* =====================================================
-          LOGIN / REGISTER FORM
+          2) LOGIN / REGISTER FORM
       ===================================================== */}
-
-      <div className="flex items-center justify-center px-4 py-7 sm:px-8 sm:py-10 lg:p-10 xl:p-14 min-h-[calc(100vh-290px)] sm:min-h-[calc(100vh-330px)] lg:min-h-screen">
-
+      <section
+        className={`relative items-center justify-center px-4 py-8 sm:px-8 lg:p-10 xl:p-14 min-h-screen min-h-[100dvh] ${
+          showForm ? "flex" : "hidden lg:flex"
+        }`}
+      >
         <form
           onSubmit={submit}
-          className="w-full max-w-md bg-white rounded-[1.75rem] sm:rounded-[2rem] border border-emerald-100 shadow-[0_20px_70px_rgba(16,185,129,0.10)] p-5 sm:p-7 lg:p-9"
+          className="w-full max-w-md glass rounded-[2rem] shadow-card p-6 sm:p-8 animate-fade-up"
         >
-
-          {/* FORM BRAND */}
+          {/* mobile: wapas welcome screen par */}
+          <button
+            type="button"
+            onClick={() => setShowForm(false)}
+            className="lg:hidden mb-4 inline-flex items-center gap-1 text-xs font-bold text-forest-500 hover:text-forest-800"
+          >
+            <ChevronLeft size={16} /> Back
+          </button>
 
           <div className="flex items-center gap-3">
-
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-emerald-50 text-emerald-700 grid place-items-center shrink-0">
+            <div className="w-11 h-11 rounded-full bg-forest-800 text-white grid place-items-center shrink-0">
               <Leaf size={22} />
             </div>
-
             <div className="min-w-0">
-              <div className="font-black text-lg sm:text-xl text-emerald-900">
-                PlantCare AI
-              </div>
-
-              <div className="text-[10px] sm:text-[11px] text-slate-400">
-                Your intelligent plant companion
-              </div>
+              <div className="font-extrabold text-lg">PlantCare AI</div>
+              <div className="text-[11px] text-slate-500">Your intelligent plant companion</div>
             </div>
-
           </div>
 
-          {/* TITLE */}
-
-          <div className="mt-7 sm:mt-9">
-
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
-              {mode === "login"
-                ? "Welcome back"
-                : "Create your account"}
+          <div className="mt-8">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              {mode === "login" ? "Welcome back" : "Create your account"}
             </h2>
-
-            <p className="text-slate-500 mt-2 text-xs sm:text-sm leading-relaxed">
+            <p className="text-slate-500 mt-2 text-sm leading-relaxed">
               {mode === "login"
                 ? "Continue caring for your plants."
                 : "Start your personalized plant-care journey."}
             </p>
-
           </div>
 
-          {/* REGISTER NAME */}
-
           {mode === "register" && (
-            <div className="mt-5 sm:mt-6">
-
-              <label className="text-xs font-bold text-slate-600">
-                Full name
-              </label>
-
+            <div className="mt-6">
+              <label className="text-xs font-bold text-forest-700">Full name</label>
               <input
                 required
-                className="w-full mt-1.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:bg-white focus:border-emerald-300 focus:ring-4 focus:ring-emerald-50 transition text-sm"
+                className={inputCls}
                 placeholder="Your name"
                 value={form.name}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    name: e.target.value,
-                  })
-                }
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
-
             </div>
           )}
 
-          {/* EMAIL */}
-
           <div className="mt-4">
-
-            <label className="text-xs font-bold text-slate-600">
-              Email address
-            </label>
-
+            <label className="text-xs font-bold text-forest-700">Email address</label>
             <input
               required
-              className="w-full mt-1.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:bg-white focus:border-emerald-300 focus:ring-4 focus:ring-emerald-50 transition text-sm"
+              className={inputCls}
               placeholder="you@example.com"
               type="email"
               value={form.email}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  email: e.target.value,
-                })
-              }
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
-
           </div>
 
-          {/* PASSWORD */}
-
           <div className="mt-4">
-
-            <label className="text-xs font-bold text-slate-600">
-              Password
-            </label>
-
+            <label className="text-xs font-bold text-forest-700">Password</label>
             <input
               required
               minLength="6"
-              className="w-full mt-1.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:bg-white focus:border-emerald-300 focus:ring-4 focus:ring-emerald-50 transition text-sm"
+              className={inputCls}
               placeholder="Minimum 6 characters"
               type="password"
               value={form.password}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  password: e.target.value,
-                })
-              }
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
-
           </div>
 
-          {/* ERROR */}
-
           {error && (
-            <div className="mt-4 rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-red-600 text-xs sm:text-sm leading-relaxed">
+            <div className="mt-4 rounded-2xl bg-coral-50 border border-coral-100 px-4 py-3 text-coral-600 text-sm leading-relaxed">
               {error}
             </div>
           )}
 
-          {/* SUBMIT */}
-
-          <button
-            disabled={loading}
-            className="w-full mt-5 sm:mt-6 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] disabled:opacity-60 text-white p-3.5 rounded-xl font-black text-sm transition shadow-lg shadow-emerald-700/10"
-          >
-            {loading
-              ? "Please wait..."
-              : mode === "login"
-              ? "Login to PlantCare AI"
-              : "Create Account"}
+          <button disabled={loading} className="btn-primary w-full mt-6 py-3.5 rounded-full text-sm disabled:opacity-60">
+            {loading ? "Please wait..." : mode === "login" ? "Login to PlantCare AI" : "Create Account"}
           </button>
-
-          {/* SWITCH LOGIN / REGISTER */}
 
           <button
             type="button"
-            className="w-full mt-4 text-emerald-700 font-bold text-xs sm:text-sm hover:text-emerald-900 transition"
+            className="w-full mt-4 text-forest-600 font-bold text-sm hover:text-forest-900 transition"
             onClick={() => {
               setError("");
-              setMode(
-                mode === "login"
-                  ? "register"
-                  : "login"
-              );
+              setMode(mode === "login" ? "register" : "login");
             }}
           >
-            {mode === "login"
-              ? "Don't have an account? Create one"
-              : "Already have an account? Login"}
+            {mode === "login" ? "Don't have an account? Create one" : "Already have an account? Login"}
           </button>
 
-          {/* MOBILE FOOTER */}
-
-          <div className="lg:hidden mt-6 pt-4 border-t border-slate-100 text-center">
-            <p className="text-[10px] text-slate-400">
-              Secure AI-powered plant care
-            </p>
+          <div className="mt-6 pt-4 border-t border-sage-200 flex items-center justify-center gap-2 text-[11px] text-slate-400">
+            <CheckCircle2 size={13} className="text-forest-500" />
+            Secure AI-powered plant care
           </div>
-
         </form>
-      </div>
+      </section>
     </div>
   );
 }
-
-/* =========================================================
-   APP
-========================================================= */
 
 export default Auth;

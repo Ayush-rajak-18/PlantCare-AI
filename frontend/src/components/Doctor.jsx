@@ -1,23 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as Icons from "../icons";
 import { api } from "../api";
-import { InitialAvatar, SectionLabel, LoadingDots, MiniFeature, TopicChip, Stat, PlantCard, DiagnosisResult, AIResponse, formatInlineText } from "./Helpers";
-const { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload, Droplets, Sun, Sprout, ShieldCheck, AlertTriangle, CheckCircle2, History, Sparkles, ImageIcon, X, RefreshCw, Send, Trash2, Search, ChevronLeft, ArrowRight, MapPin, Clock3, HeartPulse, Brain, Camera, Menu, FileText, Download } = Icons;
+import { SectionLabel, DiagnosisResult } from "./Helpers";
+const { Stethoscope, Upload, ShieldCheck, Camera, ImageIcon, X, RefreshCw, Sparkles, Leaf, FileText, Info, ScanLine, CameraOff } = Icons;
 
-function Doctor({
-  setToast,
-  onDiagnosis,
-}) {
+function Doctor({ setToast, onDiagnosis }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [cameraOn, setCameraOn] = useState(false);
+  const [showTips, setShowTips] = useState(false);
+
+  const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const galleryRef = useRef(null);
+  const captureInputRef = useRef(null); // mobile native camera fallback
+
   const diagnosisStorageKey =
     "plantcare_last_diagnosis_" +
     (localStorage.getItem("plantcare_email") ||
       localStorage.getItem("plantcare_name") ||
       "user").toLowerCase().replace(/[^a-z0-9]/g, "_");
-
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     try {
@@ -34,9 +38,75 @@ function Doctor({
     } catch {}
   }, [result, diagnosisStorageKey]);
 
-  function handleFileChange(e) {
-    const selected = e.target.files?.[0];
+  // camera stream ko video element se jodna
+  useEffect(() => {
+    if (cameraOn && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play?.().catch(() => {});
+    }
+  }, [cameraOn]);
 
+  // page chhodte waqt camera band
+  useEffect(() => () => stopCamera(), []);
+
+  function stopCamera() {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    setCameraOn(false);
+  }
+
+  async function startCamera() {
+    clearImage(false);
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      // Purane browser / non-secure page: native camera app kholo
+      captureInputRef.current?.click();
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 1280 } },
+        audio: false,
+      });
+      streamRef.current = stream;
+      setCameraOn(true);
+    } catch {
+      setToast("Camera permission nahi mili. Gallery se photo chuniye ya camera allow kijiye.");
+      captureInputRef.current?.click();
+    }
+  }
+
+  function takePhoto() {
+    const video = videoRef.current;
+    if (!video || !video.videoWidth) {
+      setToast("Camera abhi ready nahi hai, ek second ruko.");
+      return;
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          setToast("Photo capture nahi ho paayi. Dobara try karein.");
+          return;
+        }
+        const captured = new File([blob], `leaf-scan-${Date.now()}.jpg`, { type: "image/jpeg" });
+        stopCamera();
+        selectFile(captured);
+      },
+      "image/jpeg",
+      0.92
+    );
+  }
+
+  function selectFile(selected) {
     if (!selected) return;
 
     if (!selected.type.startsWith("image/")) {
@@ -49,20 +119,28 @@ function Doctor({
       return;
     }
 
+    if (preview) URL.revokeObjectURL(preview);
     setFile(selected);
     setResult(null);
-
-    const url = URL.createObjectURL(selected);
-    setPreview(url);
+    setPreview(URL.createObjectURL(selected));
   }
 
-  function clearImage() {
+  function handleFileChange(e) {
+    stopCamera();
+    selectFile(e.target.files?.[0]);
+    e.target.value = "";
+  }
+
+  function clearImage(clearResult = true) {
+    if (preview) URL.revokeObjectURL(preview);
     setFile(null);
     setPreview("");
-    setResult(null);
-    try {
-      localStorage.removeItem(diagnosisStorageKey);
-    } catch {}
+    if (clearResult) {
+      setResult(null);
+      try {
+        localStorage.removeItem(diagnosisStorageKey);
+      } catch {}
+    }
   }
 
   function generateReport() {
@@ -78,10 +156,10 @@ function Doctor({
   }
 
   async function diagnose(e) {
-    e.preventDefault();
+    e?.preventDefault?.();
 
     if (!file) {
-      setToast("Please choose a leaf image first.");
+      setToast("Please choose or scan a leaf image first.");
       return;
     }
 
@@ -107,190 +185,237 @@ function Doctor({
     }
   }
 
+  // beech wala bada button: camera kholo -> photo lo -> analyze karo
+  function mainAction() {
+    if (loading) return;
+    if (cameraOn) return takePhoto();
+    if (file) return diagnose();
+    return startCamera();
+  }
+
+  const mainLabel = loading
+    ? "Analyzing..."
+    : cameraOn
+    ? "Capture"
+    : file
+    ? "Analyze"
+    : "Scan";
+
+  const MainIcon = loading ? RefreshCw : cameraOn ? Camera : file ? Sparkles : ScanLine;
+
+  // corner brackets: photo/camera ke upar safed, khaali screen par hara
+  const bracketColor = cameraOn || preview ? "border-white/90" : "border-forest-400/60";
+  const bracket = `absolute w-14 h-14 sm:w-20 sm:h-20 ${bracketColor}`;
+
   return (
-    <div className="max-w-5xl">
-      {/* DOCTOR HEADER */}
-
-      <div className="mb-5">
-        <SectionLabel icon={Stethoscope}>
-          AI Plant Doctor
-        </SectionLabel>
-
-        <h2 className="text-2xl sm:text-3xl font-black mt-3">
-          Check your plant's health
-        </h2>
-
-        <p className="text-slate-500 text-sm mt-1 max-w-2xl">
-          Upload a clear leaf image and let the trained AI
-          model analyze possible disease patterns.
+    <div className="max-w-3xl mx-auto">
+      <div className="mb-4">
+        <SectionLabel icon={Stethoscope}>AI Plant Doctor</SectionLabel>
+        <h2 className="text-2xl sm:text-3xl font-extrabold mt-3">Scan your plant</h2>
+        <p className="text-slate-500 text-sm mt-1 max-w-xl">
+          Camera se leaf ki photo lein ya gallery se chunein. Trained AI model possible disease patterns check karega.
         </p>
       </div>
 
-      {/* UPLOAD CARD */}
+      {/* VIEWFINDER */}
 
-      <div className="bg-white rounded-[2rem] p-4 sm:p-7 border border-emerald-100 shadow-sm">
-        <form onSubmit={diagnose}>
-          {preview ? (
-            <div className="relative rounded-[1.5rem] overflow-hidden border border-emerald-100 bg-slate-100">
-              <img
-                src={preview}
-                alt="Selected leaf preview"
-                className="w-full h-[260px] sm:h-[400px] lg:h-[460px] object-contain"
-              />
+      <div className="relative rounded-[2rem] overflow-hidden border-4 border-white bg-white aspect-[4/5] sm:aspect-[4/3] shadow-card">
 
-              <div className="absolute top-3 left-3">
-                <span className="inline-flex items-center gap-2 bg-slate-950/80 backdrop-blur text-white text-[10px] sm:text-xs px-3 py-2 rounded-xl font-bold">
-                  <ImageIcon size={13} />
-                  Image selected
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={clearImage}
-                className="absolute top-3 right-3 w-10 h-10 rounded-xl bg-white/95 text-red-500 grid place-items-center shadow-lg hover:bg-red-50 transition"
-                title="Remove image"
-              >
-                <X size={18} />
-              </button>
-
-              <div className="absolute left-3 right-3 bottom-3">
-                <div className="bg-white/95 backdrop-blur rounded-xl px-3 py-2.5 shadow-lg border border-white">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <ImageIcon
-                      size={15}
-                      className="text-emerald-700 shrink-0"
-                    />
-
-                    <span className="font-bold text-xs sm:text-sm truncate">
-                      {file?.name}
-                    </span>
-                  </div>
-                </div>
-              </div>
+        {cameraOn ? (
+          <video ref={videoRef} playsInline muted autoPlay className="absolute inset-0 w-full h-full object-cover" />
+        ) : preview ? (
+          <img src={preview} alt="Selected leaf preview" className="absolute inset-0 w-full h-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 bg-gradient-to-b from-mint-50 to-sage-100">
+            <div className="w-20 h-20 rounded-full bg-mint-100 border border-mint-200 grid place-items-center text-forest-600 animate-pulse-ring">
+              <Leaf size={34} />
             </div>
-          ) : (
-            <label className="group border-2 border-dashed border-emerald-200 rounded-[1.5rem] min-h-[300px] sm:min-h-[390px] flex flex-col items-center justify-center cursor-pointer bg-gradient-to-br from-emerald-50 to-white hover:bg-emerald-50 transition-all duration-200 px-5 text-center">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[1.5rem] bg-white border border-emerald-100 grid place-items-center text-emerald-700 shadow-sm group-hover:scale-105 transition">
-                <Upload size={28} />
-              </div>
-
-              <b className="mt-5 text-lg sm:text-xl font-black">
-                Upload a leaf image
-              </b>
-
-              <span className="text-sm text-slate-500 mt-2">
-                Drag & drop or tap to choose a photo
-              </span>
-
-              <span className="text-xs text-slate-400 mt-2">
-                JPG, JPEG, PNG or WEBP • Maximum 10 MB
-              </span>
-
-              <div className="flex items-center gap-2 mt-5 text-[11px] font-bold text-emerald-700 bg-white border border-emerald-100 px-3 py-2 rounded-xl">
-                <Camera size={13} />
-                Clear, well-lit leaf photos work best
-              </div>
-
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/jpg,image/webp"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </label>
-          )}
-
-          <div className="mt-4 grid sm:grid-cols-2 gap-3">
-            <div className="bg-slate-50 border border-slate-100 rounded-xl px-4 py-3">
-              <div className="flex items-center gap-2">
-                <ShieldCheck
-                  size={15}
-                  className="text-emerald-600"
-                />
-                <span className="text-xs font-black text-slate-700">
-                  Better image quality
-                </span>
-              </div>
-
-              <p className="text-[11px] text-slate-500 mt-1">
-                Keep the leaf visible and well lit.
-              </p>
-            </div>
-
-            <div className="bg-slate-50 border border-slate-100 rounded-xl px-4 py-3">
-              <div className="flex items-center gap-2">
-                <Brain
-                  size={15}
-                  className="text-emerald-600"
-                />
-                <span className="text-xs font-black text-slate-700">
-                  AI analysis
-                </span>
-              </div>
-
-              <p className="text-[11px] text-slate-500 mt-1">
-                Results depend on image quality and model confidence.
-              </p>
-            </div>
+            <b className="mt-5 text-lg">Point at a leaf</b>
+            <span className="text-sm text-slate-500 mt-1">Neeche Scan dabayein ya Gallery se photo chunein</span>
+            <span className="text-[11px] text-slate-400 mt-2">JPG, PNG or WEBP • Max 10 MB</span>
           </div>
+        )}
 
-          <div className="flex flex-col sm:flex-row gap-3 mt-5">
-            <button
-              type="submit"
-              disabled={!file || loading}
-              className="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3.5 rounded-xl font-black text-sm transition shadow-lg shadow-emerald-700/10"
-            >
-              {loading ? (
-                <>
-                  <RefreshCw
-                    size={17}
-                    className="inline mr-2 animate-spin"
-                  />
-                  AI is analyzing...
-                </>
-              ) : (
-                <>
-                  <Stethoscope
-                    size={17}
-                    className="inline mr-2"
-                  />
-                  Analyze with AI
-                </>
-              )}
-            </button>
+        {/* soft vignette */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
 
-            {file && !loading && (
-              <button
-                type="button"
-                onClick={clearImage}
-                className="px-5 py-3.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition"
-              >
-                Choose another image
-              </button>
+        {/* corner brackets */}
+        <div className="pointer-events-none absolute inset-6 sm:inset-10">
+          <span className={`${bracket} top-0 left-0 border-t-[3px] border-l-[3px] rounded-tl-3xl`} />
+          <span className={`${bracket} top-0 right-0 border-t-[3px] border-r-[3px] rounded-tr-3xl`} />
+          <span className={`${bracket} bottom-0 left-0 border-b-[3px] border-l-[3px] rounded-bl-3xl`} />
+          <span className={`${bracket} bottom-0 right-0 border-b-[3px] border-r-[3px] rounded-br-3xl`} />
+        </div>
+
+        {/* scan line while analyzing */}
+        {loading && (
+          <div className="pointer-events-none absolute inset-x-6 sm:inset-x-10 animate-scan">
+            <div className="h-24 -translate-y-full bg-gradient-to-t from-mint-300/50 to-transparent" />
+            <div className="h-[3px] bg-mint-300 shadow-[0_0_24px_6px_rgba(114,228,175,0.8)] border-t border-dashed border-white/70" />
+          </div>
+        )}
+
+        {/* top actions */}
+        <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
+          <span className="inline-flex items-center gap-2 glass rounded-full px-3 py-2 text-[11px] font-bold">
+            {cameraOn ? (
+              <>
+                <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" /> Live camera
+              </>
+            ) : file ? (
+              <>
+                <ImageIcon size={13} className="text-forest-600" /> Image ready
+              </>
+            ) : (
+              <>
+                <Camera size={13} className="text-forest-600" /> Ready to scan
+              </>
             )}
+          </span>
+
+          {(cameraOn || file) && !loading && (
+            <button
+              type="button"
+              onClick={() => (cameraOn ? stopCamera() : clearImage())}
+              className="w-10 h-10 rounded-full glass grid place-items-center hover:bg-white transition"
+              title={cameraOn ? "Close camera" : "Remove image"}
+              aria-label={cameraOn ? "Close camera" : "Remove image"}
+            >
+              {cameraOn ? <CameraOff size={17} /> : <X size={17} />}
+            </button>
+          )}
+        </div>
+
+        {/* file info (like "Small Potted Plant" card) */}
+        {file && !cameraOn && (
+          <div className="absolute left-4 right-4 bottom-4 glass rounded-3xl px-4 py-3 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-mint-100 text-forest-600 grid place-items-center shrink-0">
+              <ImageIcon size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="font-bold text-sm truncate">{file.name}</p>
+              <p className="text-[11px] text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB • ready for AI analysis</p>
+            </div>
           </div>
-        </form>
+        )}
       </div>
+
+      {/* CONTROLS (Gallery | Scan | Photo Tips) */}
+
+      <div className="mt-6 grid grid-cols-3 items-end">
+        <button
+          type="button"
+          onClick={() => galleryRef.current?.click()}
+          className="flex flex-col items-center gap-2 text-forest-700 hover:text-forest-900 transition active:scale-95"
+        >
+          <span className="w-12 h-12 rounded-full bg-white border border-sage-200 shadow-soft grid place-items-center">
+            <Upload size={19} className="text-forest-600" />
+          </span>
+          <span className="text-xs font-semibold">Gallery</span>
+        </button>
+
+        <div className="flex flex-col items-center gap-2">
+          <button
+            type="button"
+            onClick={mainAction}
+            disabled={loading}
+            aria-label={mainLabel}
+            className="w-20 h-20 rounded-full p-1.5 bg-white border border-sage-200 shadow-soft active:scale-95 transition disabled:opacity-80"
+          >
+            <span className="w-full h-full rounded-full bg-forest-800 text-white grid place-items-center shadow-float">
+              <MainIcon size={30} className={loading ? "animate-spin" : ""} />
+            </span>
+          </button>
+          <span className="text-xs font-bold text-forest-600">{mainLabel}</span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowTips((v) => !v)}
+          className="flex flex-col items-center gap-2 text-forest-700 hover:text-forest-900 transition active:scale-95"
+        >
+          <span className={`w-12 h-12 rounded-full border grid place-items-center transition ${showTips ? "bg-forest-800 text-white border-forest-800" : "bg-white border-sage-200 shadow-soft"}`}>
+            <Info size={19} className={showTips ? "" : "text-forest-600"} />
+          </span>
+          <span className="text-xs font-semibold">Photo Tips</span>
+        </button>
+      </div>
+
+      {/* hidden inputs */}
+      <input
+        ref={galleryRef}
+        type="file"
+        accept="image/jpeg,image/png,image/jpg,image/webp"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      <input
+        ref={captureInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+
+      {/* TIPS */}
+
+      {showTips && (
+        <div className="mt-5 glass rounded-3xl p-5 animate-fade-up">
+          <div className="flex items-center gap-2 font-extrabold">
+            <ShieldCheck size={17} className="text-forest-600" />
+            Better photo, better result
+          </div>
+          <ul className="mt-3 space-y-2 text-sm text-slate-600">
+            <li>• Ek hi leaf ko frame ke andar rakhein, poora visible ho.</li>
+            <li>• Achhi roshni mein photo lein, flash ya tez dhoop se bachein.</li>
+            <li>• Camera ko steady rakhein, blur wali photo ka result kamzor hota hai.</li>
+            <li>• Beemari wala hissa (spots, patches) clearly dikhna chahiye.</li>
+          </ul>
+        </div>
+      )}
+
+      {/* ANALYZE BUTTON (wide, for desktop clarity) */}
+
+      {file && !cameraOn && (
+        <button
+          type="button"
+          onClick={diagnose}
+          disabled={loading}
+          className="btn-primary mt-6 w-full py-4 rounded-full text-sm disabled:opacity-60 flex items-center justify-center gap-2"
+        >
+          {loading ? (
+            <>
+              <RefreshCw size={17} className="animate-spin" /> AI is analyzing...
+            </>
+          ) : (
+            <>
+              <Stethoscope size={17} /> Analyze with AI
+            </>
+          )}
+        </button>
+      )}
 
       {result && (
         <>
           <DiagnosisResult result={result} />
           <div className="mt-4 flex flex-col sm:flex-row gap-3">
-            <button type="button" onClick={generateReport} className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-slate-950 text-white font-black text-sm hover:bg-slate-800 transition shadow-lg">
-              <FileText size={17} />
+            <button
+              type="button"
+              onClick={generateReport}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full glass font-bold text-sm hover:bg-white transition"
+            >
+              <FileText size={17} className="text-forest-600" />
               Generate Health Report
             </button>
-            <p className="text-[11px] text-slate-400 self-center">Opens a print-ready report. Choose <b>Save as PDF</b> in the browser print dialog.</p>
+            <p className="text-[11px] text-slate-400 self-center">
+              Opens a print-ready report. Choose <b>Save as PDF</b> in the browser print dialog.
+            </p>
           </div>
         </>
       )}
     </div>
   );
 }
-
-/* =========================================================
-   DIAGNOSIS RESULT
-========================================================= */
 
 export default Doctor;

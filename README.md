@@ -113,14 +113,16 @@ Explain the system as:
 python -m uvicorn main:app --host 0.0.0.0 --port $PORT --log-level debug
 
  1. for start venv
-
+ 
+cd PlantCare-AI
+cd backend 
 .\venv\Scripts\Activate.ps1  
-.\venv\Scripts\Activate.ps1  
-
-2. for run backend server
-
 uvicorn main:app --reload
 
+
+cd PlantCare-AI
+cd frontend
+npm run dev
 
 3. install tensorflow kerus  
 
