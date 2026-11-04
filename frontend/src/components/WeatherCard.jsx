@@ -132,7 +132,7 @@ function WeatherCard({ plants = [] }) {
         <form onSubmit={runSearch} className="mt-4 flex gap-2">
           <input
             className={inputCls + " !mt-0"}
-            placeholder="Or search a city, e.g. Noida"
+            placeholder="Or search a city, e.g. Satna"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />

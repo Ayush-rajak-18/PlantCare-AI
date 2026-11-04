@@ -3,12 +3,9 @@ import { Sprout, Stethoscope, MessageCircle, BellRing, ArrowRight, ScanLine } fr
 import PlantArt from "./PlantArt";
 
 /* ---------------------------------------------------------
-   HomeHero: Home page ka upar wala hissa
-   1. Bada sawal "What Are We Growing Today?"
-   2. "AI Plant Scan" card  (Scan Now -> Plant Doctor page)
-   3. 4 quick-action tiles (sab real pages par le jaate hain)
-
-   Props: setPage -> page badalne ka function
+   HomeHero: Home page upper prt
+  
+   Props: setPage -> page changing function
 --------------------------------------------------------- */
 const tiles = [
   { page: "plants", label: "My Plants", icon: Sprout },

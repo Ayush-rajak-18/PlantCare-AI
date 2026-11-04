@@ -3,15 +3,14 @@ import { Sprout, Stethoscope, Info, LogOut, X, Mail, Pencil, BellRing } from "..
 import { InitialAvatar } from "./Helpers";
 
 /* ---------------------------------------------------------
-   ProfileMenu: profile ka popup.
-   - Mobile par neeche se bottom-sheet ki tarah khulta hai
-   - Desktop par header ke neeche card ki tarah
+   ProfileMenu: profile popup.
+   
 
    Props:
      open          -> true/false
      onClose       -> band karne ke liye
      user          -> { name, email }
-     plantsCount   -> kitne plants hain
+     plantsCount   -> how many plnt
      scansCount    -> kitne AI scans hue
      onNavigate    -> page badalne ke liye (setPage)
      onLogout      -> logout function

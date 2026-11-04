@@ -12,8 +12,8 @@ const { X, Camera, Trash2, Lock, RefreshCw } = Icons;
 
    Props:
      user        -> { name, email, avatar }
-     onClose     -> band karo
-     onUpdated   -> save ke baad naya user object (App usse state + localStorage update karta hai)
+     onClose     -> 
+     onUpdated   -> save (App usse state + localStorage update)
      setToast    -> message
 --------------------------------------------------------- */
 function EditProfile({ user, onClose, onUpdated, setToast }) {
@@ -97,7 +97,7 @@ function EditProfile({ user, onClose, onUpdated, setToast }) {
     }
   }
 
-  // preview ke liye InitialAvatar ko blob ya server URL dono chalte hain (assetUrl dono handle karta hai)
+  // preview InitialAvatar 
   return (
     <div className={overlayCls} onClick={onClose}>
       <form onSubmit={save} onClick={(e) => e.stopPropagation()} className={sheetCls}>
@@ -157,7 +157,7 @@ function EditProfile({ user, onClose, onUpdated, setToast }) {
         <button disabled={saving} className="btn-primary w-full mt-6 py-3.5 rounded-full text-sm disabled:opacity-60 inline-flex items-center justify-center gap-2">
           {saving ? (
             <>
-              <RefreshCw size={16} className="animate-spin" /> Saving...
+              <RefreshCw size={16} className="animate-spin" /> Saving... 
             </>
           ) : (
             "Save changes"

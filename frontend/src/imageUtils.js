@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------
    compressImage: phone ki badi photo ko upload se pehle chhota karta hai
    (max 1200px, JPEG). Isse upload tez hota hai.
-   Kuch bhi galat ho to original file wapas de deta hai.
+   Kuch bhi galat ho to original file wapas de deta hai.   
 --------------------------------------------------------- */
 export async function compressImage(file, maxSize = 1200, quality = 0.85) {
   try {
@@ -26,7 +26,7 @@ export async function compressImage(file, maxSize = 1200, quality = 0.85) {
   }
 }
 
-// Photo choose karte waqt common checks. Galat ho to message wapas karta hai.
+// Photo choose karte waqt common checks. Galat ho to message wapas karta hai..................
 export function checkImageFile(file) {
   if (!file) return "No file selected.";
   if (!file.type.startsWith("image/")) return "Please choose an image file.";

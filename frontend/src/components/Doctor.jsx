@@ -38,7 +38,7 @@ function Doctor({ setToast, onDiagnosis }) {
     } catch {}
   }, [result, diagnosisStorageKey]);
 
-  // camera stream ko video element se jodna
+  // camera stream 
   useEffect(() => {
     if (cameraOn && videoRef.current && streamRef.current) {
       videoRef.current.srcObject = streamRef.current;
@@ -46,7 +46,7 @@ function Doctor({ setToast, onDiagnosis }) {
     }
   }, [cameraOn]);
 
-  // page chhodte waqt camera band
+  // page close
   useEffect(() => () => stopCamera(), []);
 
   function stopCamera() {
@@ -61,7 +61,7 @@ function Doctor({ setToast, onDiagnosis }) {
     clearImage(false);
 
     if (!navigator.mediaDevices?.getUserMedia) {
-      // Purane browser / non-secure page: native camera app kholo
+      // Purane browser / non-secure page:
       captureInputRef.current?.click();
       return;
     }
@@ -203,7 +203,7 @@ function Doctor({ setToast, onDiagnosis }) {
 
   const MainIcon = loading ? RefreshCw : cameraOn ? Camera : file ? Sparkles : ScanLine;
 
-  // corner brackets: photo/camera ke upar safed, khaali screen par hara
+  // corner brackets:
   const bracketColor = cameraOn || preview ? "border-white/90" : "border-forest-400/60";
   const bracket = `absolute w-14 h-14 sm:w-20 sm:h-20 ${bracketColor}`;
 
@@ -213,8 +213,7 @@ function Doctor({ setToast, onDiagnosis }) {
         <SectionLabel icon={Stethoscope}>AI Plant Doctor</SectionLabel>
         <h2 className="text-2xl sm:text-3xl font-extrabold mt-3">Scan your plant</h2>
         <p className="text-slate-500 text-sm mt-1 max-w-xl">
-          Camera se leaf ki photo lein ya gallery se chunein. Trained AI model possible disease patterns check karega.
-        </p>
+          Take a photo of a leaf using your camera or select one from your gallery. The trained AI model will analyze it for possible disease patterns.        </p>
       </div>
 
       {/* VIEWFINDER */}
@@ -231,7 +230,7 @@ function Doctor({ setToast, onDiagnosis }) {
               <Leaf size={34} />
             </div>
             <b className="mt-5 text-lg">Point at a leaf</b>
-            <span className="text-sm text-slate-500 mt-1">Neeche Scan dabayein ya Gallery se photo chunein</span>
+            <span className="text-sm text-slate-500 mt-1">Tap Scan below or choose a photo from your gallery.</span>
             <span className="text-[11px] text-slate-400 mt-2">JPG, PNG or WEBP • Max 10 MB</span>
           </div>
         )}
@@ -367,10 +366,10 @@ function Doctor({ setToast, onDiagnosis }) {
             Better photo, better result
           </div>
           <ul className="mt-3 space-y-2 text-sm text-slate-600">
-            <li>• Ek hi leaf ko frame ke andar rakhein, poora visible ho.</li>
-            <li>• Achhi roshni mein photo lein, flash ya tez dhoop se bachein.</li>
-            <li>• Camera ko steady rakhein, blur wali photo ka result kamzor hota hai.</li>
-            <li>• Beemari wala hissa (spots, patches) clearly dikhna chahiye.</li>
+            <li>• Keep a single leaf fully visible within the frame.</li>
+            <li>• Take the photo in good lighting. Avoid flash or harsh sunlight.</li>
+            <li>• Hold the camera steady. Blurry photos may lead to less accurate results.</li>
+            <li>• Make sure the diseased areas (spots or patches) are clearly visible.</li>
           </ul>
         </div>
       )}

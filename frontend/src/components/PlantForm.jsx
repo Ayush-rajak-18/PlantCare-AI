@@ -7,12 +7,12 @@ import { inputCls, labelCls, overlayCls, sheetCls } from "../ui";
 const { X, Camera, Leaf, Trash2, RefreshCw, Plus, Check } = Icons;
 
 /* ---------------------------------------------------------
-   PlantForm: plant ADD ya EDIT karne ka popup (photo ke saath)
+   PlantForm: plant ADD or EDIT  popup 
 
    Props:
      plant     -> null = naya plant, object = edit
      onClose   -> popup band
-     onSaved   -> save ke baad plants reload
+     onSaved   -> save after plants reload
      setToast  -> message
 --------------------------------------------------------- */
 function PlantForm({ plant, onClose, onSaved, setToast }) {
@@ -28,7 +28,7 @@ function PlantForm({ plant, onClose, onSaved, setToast }) {
 
   // photo state
   const fileRef = useRef(null);
-  const [photoFile, setPhotoFile] = useState(null);       // naya chuna hua photo
+  const [photoFile, setPhotoFile] = useState(null);      
   const [preview, setPreview] = useState(plant?.photo ? assetUrl(plant.photo) : "");
   const [removePhoto, setRemovePhoto] = useState(false);
 
@@ -68,12 +68,12 @@ function PlantForm({ plant, onClose, onSaved, setToast }) {
     try {
       const payload = { ...form, watering_days: Number(form.watering_days) };
 
-      // 1) plant ki details save
+      // 1) plant  details save
       const saved = isEdit
         ? await apiJson(`/plants/${plant._id}`, "PUT", payload)
         : await apiJson("/plants", "POST", payload);
 
-      // 2) photo (alag request; fail ho to bhi plant save rehta hai)
+      // 2) photo
       let photoProblem = "";
       try {
         if (photoFile) {

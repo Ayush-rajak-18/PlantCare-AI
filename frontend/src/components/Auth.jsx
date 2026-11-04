@@ -158,7 +158,7 @@ function Auth({ onLogin }) {
           onSubmit={submit}
           className="w-full max-w-md glass rounded-[2rem] shadow-card p-6 sm:p-8 animate-fade-up"
         >
-          {/* mobile: wapas welcome screen par */}
+          {/* mobile:  */}
           <button
             type="button"
             onClick={() => setShowForm(false)}

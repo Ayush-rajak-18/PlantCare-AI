@@ -5,7 +5,7 @@ import { Leaf, LayoutDashboard, Stethoscope, MessageCircle, Plus, LogOut, Upload
 function InitialAvatar({ name, src, large = false }) {
   const size = large ? "w-12 h-12 text-base" : "w-9 h-9 text-sm";
 
-  // profile photo ho to wo dikhao
+  // profile photo show
   if (src) {
     return (
       <img
@@ -16,7 +16,7 @@ function InitialAvatar({ name, src, large = false }) {
     );
   }
 
-  // warna naam ka pehla akshar
+  // firs name letter
   return (
     <div
       className={`${size} rounded-full bg-gradient-to-br from-forest-500 to-forest-800 text-white grid place-items-center font-black shadow-sm shrink-0 ring-2 ring-white/80`}
@@ -336,7 +336,7 @@ function DiagnosisResult({ result }) {
 
 /* =========================================================
    AI RESPONSE FORMATTER
-   Makes plain backend text look like a proper AI response.
+   
 ========================================================= */
 
 function formatInlineText(text) {
